@@ -1,0 +1,109 @@
+/* Gradient Background */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #111111, #444444, #aaaaaa);
+  color: #fff;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background-color: rgba(0,0,0,0.7);
+}
+
+nav .logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+nav .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+nav .nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Limited Product */
+#limited-product {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.limited-card {
+  display: flex;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  gap: 30px;
+}
+
+.limited-card img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.limited-info h2 {
+  margin-top: 0;
+}
+
+.limited-info p {
+  margin: 10px 0;
+}
+
+.limited-info button {
+  padding: 10px 25px;
+  background-color: #fff;
+  color: #111;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Other Products Grid */
+#other-products {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.product-card {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 15px;
+  width: 200px;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.product-card h3 {
+  margin: 10px 0 5px 0;
+}
+
+.product-card p {
+  margin: 0;
+  font-weight: bold;
+}
