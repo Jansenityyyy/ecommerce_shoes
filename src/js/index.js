@@ -22,7 +22,7 @@ fetch('php/fetch_limited.php')
   .catch(err => console.error('Error fetching limited product:', err));
 
 
-
+// Fetch Other Products (all brands dynamically)
 const brands = ['nike', 'adidas', 'puma'];
 const productList = document.getElementById('productList');
 let allProductsHTML = '';
