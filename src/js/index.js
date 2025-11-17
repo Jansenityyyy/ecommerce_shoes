@@ -1,4 +1,3 @@
-// Countdown Timer Function
 let countdownInterval;
 
 function startCountdown(endDate) {
@@ -8,29 +7,30 @@ function startCountdown(endDate) {
   const minutesEl = document.getElementById('minutes');
   const secondsEl = document.getElementById('seconds');
 
-  if (countdownInterval) clearInterval(countdownInterval);
+  if(countdownInterval) clearInterval(countdownInterval);
 
   function updateCountdown() {
     const now = new Date().getTime();
-    const end = new Date(endDate + "T23:59:59").getTime(); // ensure full day countdown
+    // Add full day time to make countdown work till 23:59:59
+    const end = new Date(endDate + "T23:59:59").getTime();
     const distance = end - now;
 
-    if (distance < 0) {
+    if(distance < 0){
       clearInterval(countdownInterval);
       countdownContainer.innerHTML = '<div class="countdown-label" style="color: #e74c3c;"><i class="fas fa-exclamation-circle"></i> This offer has ended!</div>';
       setTimeout(() => location.reload(), 3000);
       return;
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const days = Math.floor(distance / (1000*60*60*24));
+    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
 
-    daysEl.textContent = String(days).padStart(2, '0');
-    hoursEl.textContent = String(hours).padStart(2, '0');
-    minutesEl.textContent = String(minutes).padStart(2, '0');
-    secondsEl.textContent = String(seconds).padStart(2, '0');
+    daysEl.textContent = String(days).padStart(2,'0');
+    hoursEl.textContent = String(hours).padStart(2,'0');
+    minutesEl.textContent = String(minutes).padStart(2,'0');
+    secondsEl.textContent = String(seconds).padStart(2,'0');
 
     [daysEl, hoursEl, minutesEl, secondsEl].forEach(el => {
       el.style.animation = 'none';
@@ -38,22 +38,19 @@ function startCountdown(endDate) {
     });
   }
 
-  countdownContainer.style.display = 'block';
+  countdownContainer.style.display = 'flex'; // show container
   updateCountdown();
   countdownInterval = setInterval(updateCountdown, 1000);
 }
 
-// Add pulse animation dynamically
+// Add CSS pulse animation
 const style = document.createElement('style');
 style.textContent = `
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-  }
+@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
 `;
 document.head.appendChild(style);
 
-// Fetch Limited Product
+// Fetch limited product
 fetch('php/fetch_limited.php')
   .then(res => res.json())
   .then(product => {
@@ -61,7 +58,7 @@ fetch('php/fetch_limited.php')
       document.getElementById('limited-img').src = encodeURI(`src/img/${product.image}`);
       document.getElementById('limited-name').innerText = product.name;
       document.getElementById('limited-desc').innerText = product.description;
-      document.getElementById('limited-price').innerText = `₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+      document.getElementById('limited-price').innerText = `₱${parseFloat(product.price).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 
       if(product.end_date) startCountdown(product.end_date);
     } else {
@@ -69,27 +66,3 @@ fetch('php/fetch_limited.php')
     }
   })
   .catch(err => console.error('Error fetching limited product:', err));
-
-// Fetch Other Products
-const brands = ['nike', 'adidas', 'puma'];
-const productList = document.getElementById('productList');
-let allProductsHTML = '';
-
-brands.forEach(brand => {
-  fetch(`php/fetch_products.php?brand=${brand}`)
-    .then(res => res.json())
-    .then(data => {
-      data.forEach(p => {
-        const productImg = encodeURI(`src/img/${p.image}`);
-        allProductsHTML += `
-          <div class="product-card">
-            <img src="${productImg}" alt="${p.name}">
-            <h3>${p.name}</h3>
-            <p>₱${parseFloat(p.price).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
-          </div>
-        `;
-      });
-      productList.innerHTML = allProductsHTML;
-    })
-    .catch(err => console.error(`Error fetching products for ${brand}:`, err));
-});
