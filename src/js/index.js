@@ -1,4 +1,4 @@
-// Countdown Timer
+// Countdown Timer Function
 let countdownInterval;
 
 function startCountdown(endDate) {
@@ -11,34 +11,30 @@ function startCountdown(endDate) {
   if (countdownInterval) clearInterval(countdownInterval);
 
   function updateCountdown() {
-    const now = new Date();
-
-    // Parse endDate as Manila time, 23:59:59
-    const parts = endDate.split('-'); // ["YYYY","MM","DD"]
-    const end = new Date(parts[0], parts[1]-1, parts[2], 23, 59, 59).getTime();
-
-    const distance = end - now.getTime();
+    const now = new Date().getTime();
+    const end = new Date(endDate + "T23:59:59").getTime(); // ensure full day countdown
+    const distance = end - now;
 
     if (distance < 0) {
       clearInterval(countdownInterval);
       countdownContainer.innerHTML = '<div class="countdown-label" style="color: #e74c3c;"><i class="fas fa-exclamation-circle"></i> This offer has ended!</div>';
+      setTimeout(() => location.reload(), 3000);
       return;
     }
 
-    const days = Math.floor(distance / (1000*60*60*24));
-    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-    const seconds = Math.floor((distance % (1000*60)) / 1000);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     daysEl.textContent = String(days).padStart(2, '0');
     hoursEl.textContent = String(hours).padStart(2, '0');
     minutesEl.textContent = String(minutes).padStart(2, '0');
     secondsEl.textContent = String(seconds).padStart(2, '0');
 
-    // Animation
     [daysEl, hoursEl, minutesEl, secondsEl].forEach(el => {
       el.style.animation = 'none';
-      setTimeout(() => { el.style.animation = 'pulse 0.3s ease'; }, 10);
+      setTimeout(() => el.style.animation = 'pulse 0.3s ease', 10);
     });
   }
 
@@ -47,7 +43,7 @@ function startCountdown(endDate) {
   countdownInterval = setInterval(updateCountdown, 1000);
 }
 
-// Add pulse animation to CSS dynamically
+// Add pulse animation dynamically
 const style = document.createElement('style');
 style.textContent = `
   @keyframes pulse {
@@ -61,43 +57,39 @@ document.head.appendChild(style);
 fetch('php/fetch_limited.php')
   .then(res => res.json())
   .then(product => {
-    if (product) {
-      document.getElementById('limited-img').src = `src/img/${product.image}`;
+    if(product){
+      document.getElementById('limited-img').src = encodeURI(`src/img/${product.image}`);
       document.getElementById('limited-name').innerText = product.name;
       document.getElementById('limited-desc').innerText = product.description;
-      document.getElementById('limited-price').innerText = `₱${parseFloat(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('limited-price').innerText = `₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
 
-      if (product.end_date) startCountdown(product.end_date);
+      if(product.end_date) startCountdown(product.end_date);
     } else {
       document.getElementById('limited-product').style.display = 'none';
     }
   })
   .catch(err => console.error('Error fetching limited product:', err));
 
-
-// Fetch Other Products Dynamically
+// Fetch Other Products
 const brands = ['nike', 'adidas', 'puma'];
 const productList = document.getElementById('productList');
+let allProductsHTML = '';
 
 brands.forEach(brand => {
   fetch(`php/fetch_products.php?brand=${brand}`)
     .then(res => res.json())
     .then(data => {
-      if (!data || !Array.isArray(data)) return;
-
       data.forEach(p => {
         const productImg = encodeURI(`src/img/${p.image}`);
-        const formattedPrice = parseFloat(p.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        productCard.innerHTML = `
-          <img src="${productImg}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>₱${formattedPrice}</p>
+        allProductsHTML += `
+          <div class="product-card">
+            <img src="${productImg}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <p>₱${parseFloat(p.price).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
+          </div>
         `;
-        productList.appendChild(productCard);
       });
+      productList.innerHTML = allProductsHTML;
     })
     .catch(err => console.error(`Error fetching products for ${brand}:`, err));
 });

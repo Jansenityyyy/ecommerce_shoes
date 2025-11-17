@@ -18,8 +18,8 @@ $result = mysqli_stmt_get_result($stmt);
 if($result && mysqli_num_rows($result) > 0){
     $product = mysqli_fetch_assoc($result);
     
-    // Optional: make price formatted here if you want PHP-side formatting
-    $product['price'] = number_format($product['price'], 2, '.', ','); 
+    // Return price as number only (not formatted)
+    $product['price'] = floatval($product['price']); 
 
     echo json_encode($product, JSON_UNESCAPED_UNICODE);
 } else {

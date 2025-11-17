@@ -6,8 +6,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $name = $_POST['name'];
     $price = floatval(str_replace(['₱',',',' '], '', $_POST['price']));
     $description = $_POST['description'];
-    $start_date = $_POST['start_date'];
-    $end_date = $_POST['end_date'];
+
+    // Ensure dates are in YYYY-MM-DD format
+    $start_date = date('Y-m-d', strtotime($_POST['start_date']));
+    $end_date = date('Y-m-d', strtotime($_POST['end_date']));
 
     if(isset($_FILES['image']) && $_FILES['image']['error'] == 0){
         $imgName = $_FILES['image']['name'];
