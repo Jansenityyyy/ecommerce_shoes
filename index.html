@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vogue Shoes Store</title>
+  <title>SenSneaks Inc. - Premium Footwear</title>
 
   <!-- Main CSS -->
   <link rel="stylesheet" href="style.css">
@@ -28,10 +28,10 @@
   <nav>
     <div class="logo">SenSneaks Inc.</div>
     <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Products</a></li>
-      <li><a href="#">Cart</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
+      <li><a href="#"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
     </ul>
   </nav>
 
@@ -44,7 +44,31 @@
           <h2 id="limited-name">Loading…</h2>
           <p id="limited-desc"></p>
           <p id="limited-price"></p>
-          <button id="shop-now">Buy Now!</button>
+          
+          <!-- Countdown Timer -->
+          <div class="countdown-container" id="countdown-container" style="display: none;">
+            <div class="countdown-label"><i class="fas fa-clock"></i> Offer Ends In:</div>
+            <div class="countdown-timer">
+              <div class="countdown-box">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-text">Days</div>
+              </div>
+              <div class="countdown-box">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-text">Hours</div>
+              </div>
+              <div class="countdown-box">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-text">Minutes</div>
+              </div>
+              <div class="countdown-box">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-text">Seconds</div>
+              </div>
+            </div>
+          </div>
+          
+          <button id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
         </div>
       </div>
     </div>
@@ -52,14 +76,12 @@
 
   <!-- Other Products -->
   <section id="other-products">
-    <h2>BEST SELLING SHOES!</h2>
+    <h2><i class="fas fa-fire"></i> BEST SELLING SHOES!</h2>
     <div class="product-grid" id="productList"></div>
   </section>
 
-
   <!-------------footer--------------->
-
-  <div class="footer">
+  <div class="footer" id="contact">
     <div class="container">
       <div class="row">
         <div class="footer-col-1">
@@ -68,13 +90,13 @@
           </a>
           <p>Download App for Android and ios</p>
           <div class="app-logo">
-            <img src="src/img/d1.png">
-            <img src="src/img/d2.png">
+            <img src="src/img/d1.png" alt="Google Play">
+            <img src="src/img/d2.png" alt="App Store">
           </div>
         </div>
         <div class="footer-col-2">
-          <a href="before.html"><img src="src/img/Black and Orange Shoe Brand Logo.png"></a>
-          <p>Vogue Shoes—stepping up your style with premium comfort, trendsetting designs, and exclusive footwear for
+          <a href="before.html"><img src="src/img/Black and Orange Shoe Brand Logo.png" alt="SenSneaks Logo"></a>
+          <p>SenSneaks Inc.—stepping up your style with premium comfort, trendsetting designs, and exclusive footwear for
             every occasion.</p>
         </div>
         <div class="footer-col-3">
@@ -99,13 +121,12 @@
                 <i class="fa-brands fa-tiktok fa-1g"></i> TikTok</a></li>
           </ul>
         </div>
-
-
       </div>
       <hr>
       <p class="copyright">© 2025 SenSneaks Inc. All rights reserved.</p>
     </div>
   </div>
+  
   <!-- JS -->
   <script src="src/js/index.js"></script>
 
