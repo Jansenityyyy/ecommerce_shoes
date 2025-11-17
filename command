@@ -41,3 +41,7 @@ INSERT INTO adidas (name, price, image, description) VALUES
 INSERT INTO puma (name, price, image, description) VALUES
 ('Puma RS-X', 6000, 'puma/RS-X.jpg', 'Retro-inspired, bold design sneakers.'),
 ('Puma Suede Classic', 5000, 'puma/Suede Classic.jpg', 'Classic Puma style, everyday wear.');
+
+git add.
+git commit -m "Added product tables and sample data for Nike, Adidas, and Puma."
+git push origin main
