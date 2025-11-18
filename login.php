@@ -58,9 +58,7 @@ body {
     position:relative;
 }
 body::before {
-    content:'';
-    position:absolute;
-    top:0; left:0; right:0; bottom:0;
+    content:''; position:absolute; top:0; left:0; right:0; bottom:0;
     background: radial-gradient(circle at 30% 50%, rgba(255,157,0,0.1) 0%,transparent 50%),
                 radial-gradient(circle at 70% 50%, rgba(255,157,0,0.05) 0%,transparent 50%);
     pointer-events:none;
@@ -84,11 +82,14 @@ nav .nav-links li a:hover::after {width:100%;}
 
 /* Auth container */
 .auth-container {position:relative;width:850px;height:550px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,157,0,0.1);border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.3);overflow:hidden;z-index:1; animation:fadeIn 0.8s ease;}
-.forms-container {position:absolute;width:100%;height:100%;transition:all 0.6s ease-in-out; z-index:10;} /* pointer-events removed */
-.signin-signup {position:absolute;top:50%;left:75%;transform:translate(-50%,-50%);width:50%;display:grid;z-index:11; pointer-events:auto;}
-form {display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 5rem;overflow:hidden;grid-column:1/2;grid-row:1/2;transition:0.2s 0.7s ease-in-out; pointer-events:auto;}
-form.sign-in-form {z-index:2;}
-form.sign-up-form {z-index:1;opacity:0;}
+.forms-container {position:absolute;width:100%;height:100%;transition:all 0.6s ease-in-out; z-index:10;}
+.signin-signup {position:absolute;top:50%;left:75%;transform:translate(-50%,-50%);width:50%;display:grid;z-index:11;}
+form {display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 5rem;overflow:hidden;grid-column:1/2;grid-row:1/2;transition:0.2s 0.7s ease-in-out;}
+form.sign-in-form {z-index:2;opacity:1;pointer-events:auto;}
+form.sign-up-form {z-index:1;opacity:0;pointer-events:none;}
+.auth-container.sign-up-mode form.sign-in-form {z-index:1;opacity:0;pointer-events:none;}
+.auth-container.sign-up-mode form.sign-up-form {z-index:2;opacity:1;pointer-events:auto;}
+
 .title {font-size:2.2rem;color:#fff;margin-bottom:10px;font-weight:700;}
 .input-field {max-width:380px;width:100%;height:55px;background:rgba(255,255,255,0.08);margin:10px 0;border-radius:10px;display:grid;grid-template-columns:15% 85%;padding:0 0.4rem;border:1px solid rgba(255,157,0,0.2);transition:all 0.3s ease;}
 .input-field:focus-within {border-color:#ff9d00;background:rgba(255,255,255,0.12);box-shadow:0 0 15px rgba(255,157,0,0.2);}
@@ -99,10 +100,7 @@ form.sign-up-form {z-index:1;opacity:0;}
 .btn:hover {transform:translateY(-3px);box-shadow:0 15px 40px rgba(255,157,0,0.5);}
 .btn::before {content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(135deg,#fff 0%,#ff9d00 100%);transition:left 0.4s ease;z-index:-1;}
 .btn:hover::before {left:0;}
-.social-text {padding:0.7rem 0;font-size:1rem;color:#ccc;}
-.social-media {display:flex;justify-content:center;gap:15px;}
-.social-icon {height:46px;width:46px;border:1px solid rgba(255,157,0,0.2);display:flex;justify-content:center;align-items:center;margin:0 0.45rem;color:#ff9d00;border-radius:50%;font-size:1.1rem;transition:all 0.3s ease;background:rgba(255,255,255,0.05);text-decoration:none;}
-.social-icon:hover {color:#fff;border-color:#ff9d00;background:rgba(255,157,0,0.2);transform:translateY(-3px);}
+
 .panels-container {position:absolute;width:100%;height:100%;top:0;left:0;display:grid;grid-template-columns:repeat(2,1fr);}
 .panel {display:flex;flex-direction:column;align-items:flex-end;justify-content:space-around;text-align:center;z-index:7;padding:3rem 17% 2rem 12%;}
 .left-panel {pointer-events:all;padding:3rem 12% 2rem 17%;}
@@ -113,11 +111,9 @@ form.sign-up-form {z-index:1;opacity:0;}
 .btn.transparent:hover {background:rgba(255,157,0,0.1);color:#fff;border-color:#fff;}
 .image {width:100%;transition:1.1s 0.4s ease-in-out;}
 .right-panel .content,.right-panel .image {transform:translateX(800px);}
-.auth-container.sign-up-mode .signin-signup {left:25%;}
-.auth-container.sign-up-mode form.sign-in-form {z-index:1;opacity:0;}
-.auth-container.sign-up-mode form.sign-up-form {z-index:2;opacity:1;}
-@keyframes fadeIn {from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
 .auth-container::before {content:'';position:absolute;width:2000px;height:2000px;border-radius:50%;background:linear-gradient(135deg,rgba(255,157,0,0.15),rgba(255,119,0,0.1));top:50%;right:48%;transform:translateY(-50%);z-index:6;transition:1.8s ease-in-out;}
+
+@keyframes fadeIn {from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -209,7 +205,6 @@ const container = document.querySelector(".auth-container");
 sign_up_btn.addEventListener("click", () => {
     container.classList.add("sign-up-mode");
 });
-
 sign_in_btn.addEventListener("click", () => {
     container.classList.remove("sign-up-mode");
 });
