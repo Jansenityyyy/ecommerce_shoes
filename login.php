@@ -81,15 +81,55 @@ nav .nav-links li a::after {content:'';position:absolute;bottom:-5px;left:0;widt
 nav .nav-links li a:hover::after {width:100%;}
 
 /* Auth container */
-.auth-container {position:relative;width:850px;height:550px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,157,0,0.1);border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.3);overflow:hidden;z-index:1; animation:fadeIn 0.8s ease;}
-.forms-container {position:absolute;width:100%;height:100%;transition:all 0.6s ease-in-out; z-index:10;}
-.signin-signup {position:absolute;top:50%;left:75%;transform:translate(-50%,-50%);width:50%;display:grid;z-index:11;}
-form {display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 5rem;overflow:hidden;grid-column:1/2;grid-row:1/2;transition:0.2s 0.7s ease-in-out;}
-form.sign-in-form {z-index:2;opacity:1;pointer-events:auto;}
-form.sign-up-form {z-index:1;opacity:0;pointer-events:none;}
-.auth-container.sign-up-mode form.sign-in-form {z-index:1;opacity:0;pointer-events:none;}
-.auth-container.sign-up-mode form.sign-up-form {z-index:2;opacity:1;pointer-events:auto;}
+.auth-container {
+    position:relative;
+    width:850px;
+    height:550px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,157,0,0.1);
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    overflow:hidden;
+    z-index:1;
+    animation:fadeIn 0.8s ease;
+}
 
+/* Forms */
+.forms-container {
+    position:absolute;
+    width:100%;
+    height:100%;
+    transition:all 0.6s ease-in-out;
+    z-index:10;
+    pointer-events:none; /* prevent blocking panels */
+}
+.signin-signup {
+    position:absolute;
+    top:50%;
+    left:75%;
+    transform:translate(-50%,-50%);
+    width:50%;
+    display:grid;
+    z-index:11;
+}
+form {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:0 5rem;
+    overflow:hidden;
+    grid-column:1/2;
+    grid-row:1/2;
+    transition:0.2s 0.7s ease-in-out;
+    pointer-events:auto; /* forms are clickable */
+}
+form.sign-in-form {z-index:2;opacity:1;}
+form.sign-up-form {z-index:1;opacity:0;}
+.auth-container.sign-up-mode form.sign-in-form {z-index:1;opacity:0;}
+.auth-container.sign-up-mode form.sign-up-form {z-index:2;opacity:1;}
+
+/* Form styling */
 .title {font-size:2.2rem;color:#fff;margin-bottom:10px;font-weight:700;}
 .input-field {max-width:380px;width:100%;height:55px;background:rgba(255,255,255,0.08);margin:10px 0;border-radius:10px;display:grid;grid-template-columns:15% 85%;padding:0 0.4rem;border:1px solid rgba(255,157,0,0.2);transition:all 0.3s ease;}
 .input-field:focus-within {border-color:#ff9d00;background:rgba(255,255,255,0.12);box-shadow:0 0 15px rgba(255,157,0,0.2);}
@@ -100,17 +140,38 @@ form.sign-up-form {z-index:1;opacity:0;pointer-events:none;}
 .btn:hover {transform:translateY(-3px);box-shadow:0 15px 40px rgba(255,157,0,0.5);}
 .btn::before {content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(135deg,#fff 0%,#ff9d00 100%);transition:left 0.4s ease;z-index:-1;}
 .btn:hover::before {left:0;}
+.btn.transparent {margin:0;background:none;border:2px solid #ff9d00;width:180px;height:49px;font-weight:700;font-size:0.9rem;color:#ff9d00;box-shadow:none;}
+.btn.transparent:hover {background:rgba(255,157,0,0.1);color:#fff;border-color:#fff;}
 
-.panels-container {position:absolute;width:100%;height:100%;top:0;left:0;display:grid;grid-template-columns:repeat(2,1fr);}
-.panel {display:flex;flex-direction:column;align-items:flex-end;justify-content:space-around;text-align:center;z-index:7;padding:3rem 17% 2rem 12%;}
-.left-panel {pointer-events:all;padding:3rem 12% 2rem 17%;}
+/* Panels */
+.panels-container {
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    z-index:20; /* above forms for buttons */
+}
+.panel {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    justify-content:space-around;
+    text-align:center;
+    z-index:21;
+    pointer-events:all;
+    padding:3rem 17% 2rem 12%;
+}
+.left-panel {padding:3rem 12% 2rem 17%;}
 .panel .content {color:#fff;transition:0.9s 0.6s ease-in-out;}
 .panel h3 {font-weight:700;line-height:1;font-size:2rem;margin-bottom:10px;}
 .panel p {font-size:0.95rem;padding:0.7rem 0;color:#ccc;line-height:1.6;}
-.btn.transparent {margin:0;background:none;border:2px solid #ff9d00;width:180px;height:49px;font-weight:700;font-size:0.9rem;color:#ff9d00;box-shadow:none;}
-.btn.transparent:hover {background:rgba(255,157,0,0.1);color:#fff;border-color:#fff;}
 .image {width:100%;transition:1.1s 0.4s ease-in-out;}
 .right-panel .content,.right-panel .image {transform:translateX(800px);}
+
+/* Background circle */
 .auth-container::before {content:'';position:absolute;width:2000px;height:2000px;border-radius:50%;background:linear-gradient(135deg,rgba(255,157,0,0.15),rgba(255,119,0,0.1));top:50%;right:48%;transform:translateY(-50%);z-index:6;transition:1.8s ease-in-out;}
 
 @keyframes fadeIn {from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
@@ -184,7 +245,7 @@ form.sign-up-form {z-index:1;opacity:0;pointer-events:none;}
                 <p>Join SenSneaks Inc. today and discover exclusive deals on premium footwear!</p>
                 <button class="btn transparent" id="sign-up-btn">Sign Up</button>
             </div>
-            <img src="src/img/logo.png" class="image" alt="Sneaker" />
+            <img src="src/img/.png" class="image" alt="Sneaker" />
         </div>
         <div class="panel right-panel">
             <div class="content">
@@ -192,7 +253,7 @@ form.sign-up-form {z-index:1;opacity:0;pointer-events:none;}
                 <p>Welcome back! Sign in to access your account and continue shopping.</p>
                 <button class="btn transparent" id="sign-in-btn">Sign In</button>
             </div>
-            <img src="src/img/logo.png" class="image" alt="Sneaker" />
+            <img src="src/img/.png" class="image" alt="Sneaker" />
         </div>
     </div>
 </div>

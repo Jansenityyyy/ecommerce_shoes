@@ -191,7 +191,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
     </li>
 <?php else: ?>
-    <li><a href="login.html" class="login-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+    <li><a href="login.php" class="login-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
 <?php endif; ?>
 
     </ul>
