@@ -175,38 +175,25 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       <li><a href="#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
       <li><a href="#"><i class="fas fa-shopping-cart"></i> Cart</a></li>
       
-      <?php if($isLoggedIn): ?>
-        <!-- User Menu (Logged In) -->
-        <li class="user-menu">
-          <div class="user-display" onclick="toggleDropdown()">
+<?php if($isLoggedIn): ?>
+    <li class="user-menu">
+        <div class="user-display" onclick="toggleDropdown()">
             <div class="user-avatar"><?= strtoupper(substr($username, 0, 1)) ?></div>
             <span class="user-name"><?= htmlspecialchars($username) ?></span>
             <i class="fas fa-chevron-down dropdown-arrow"></i>
-          </div>
-          <div class="dropdown-menu">
-            <a href="profile.php">
-              <i class="fas fa-user"></i>
-              My Profile
-            </a>
-            <a href="orders.php">
-              <i class="fas fa-box"></i>
-              My Orders
-            </a>
-            <a href="settings.php">
-              <i class="fas fa-cog"></i>
-              Settings
-            </a>
+        </div>
+        <div class="dropdown-menu">
+            <a href="profile.php"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.php"><i class="fas fa-box"></i> My Orders</a>
+            <a href="settings.php"><i class="fas fa-cog"></i> Settings</a>
             <div class="dropdown-divider"></div>
-            <a href="php/logout.php">
-              <i class="fas fa-sign-out-alt"></i>
-              Logout
-            </a>
-          </div>
-        </li>
-      <?php else: ?>
-        <!-- Login Link (Not Logged In) -->
-        <li><a href="login.html" class="login-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-      <?php endif; ?>
+            <a href="php/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </li>
+<?php else: ?>
+    <li><a href="login.html" class="login-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+<?php endif; ?>
+
     </ul>
   </nav>
 
