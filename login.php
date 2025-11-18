@@ -200,6 +200,7 @@ if(isset($_GET['register']) && $_GET['register'] == 'success') {
             width: 100%;
             height: 100%;
             transition: all 0.6s ease-in-out;
+            pointer-events: none;
         }
 
         .signin-signup {
@@ -212,6 +213,7 @@ if(isset($_GET['register']) && $_GET['register'] == 'success') {
             grid-template-columns: 1fr;
             z-index: 5;
             transition: 1s 0.7s ease-in-out;
+            pointer-events: auto;
         }
 
         form {
