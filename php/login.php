@@ -18,10 +18,9 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 if ($user = mysqli_fetch_assoc($result)) {
-
     if (password_verify($password, $user['password'])) {
 
-        // Set sessions
+        // Set sessions for dynamic username
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];
@@ -32,7 +31,6 @@ if ($user = mysqli_fetch_assoc($result)) {
         header("Location: ../login.php?error=invalid_password");
         exit();
     }
-
 } else {
     header("Location: ../login.php?error=user_not_found");
     exit();
