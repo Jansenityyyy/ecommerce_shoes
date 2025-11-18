@@ -36,7 +36,7 @@ if(isset($_GET['register']) && $_GET['register'] == 'success') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SenSneaks Inc.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -200,7 +200,7 @@ if(isset($_GET['register']) && $_GET['register'] == 'success') {
             width: 100%;
             height: 100%;
             transition: all 0.6s ease-in-out;
-            pointer-events: none;
+            
         }
 
         .signin-signup {
