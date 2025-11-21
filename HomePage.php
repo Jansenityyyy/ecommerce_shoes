@@ -231,6 +231,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
           </div>
           
           <button id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
+          <button><i class="fas fa-shopping-cart"Add cart></i>Add to Cart</button>
         </div>
       </div>
     </div>

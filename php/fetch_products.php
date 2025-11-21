@@ -20,7 +20,7 @@ function fetchBrandProducts($conn, $table) {
     if($result){
         while($row = mysqli_fetch_assoc($result)){
             // Format price as PHP string with 2 decimals
-            $row['price'] = number_format($row['price'], 2, '.', ',');
+            $row['price'] = number_format($row['price'], 2, 2, 2, '.', ',');
             $rows[] = $row;
         }
     }
