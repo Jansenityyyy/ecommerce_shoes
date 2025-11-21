@@ -3,7 +3,7 @@ fetch('php/fetch_limited.php')
   .then(res => res.json())
   .then(product => {
     if(product){
-      const limitedImg = encodeURI(`src/img/${product.image}`);
+      const limitedImg = encodeURI(`src/img/${product.brand}/${product.image}`);
       document.getElementById('limited-img').src = limitedImg;
       document.getElementById('limited-name').innerText = product.name;
       document.getElementById('limited-desc').innerText = product.description;
@@ -32,7 +32,7 @@ brands.forEach(brand => {
     .then(res => res.json())
     .then(data => {
       data.forEach(p => {
-        const productImg = encodeURI(`src/img/${p.image}`);
+        const productImg = encodeURI(`src/img/${p.brand}/${p.image}`);
         const formattedPrice = parseFloat(p.price).toLocaleString('en-PH', {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2

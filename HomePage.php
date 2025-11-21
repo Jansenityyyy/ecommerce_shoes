@@ -342,31 +342,23 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       fetch(`php/fetch_products.php?brand=${brand}`)
         .then(res => res.json())
         .then(data => {
-          console.log(`Products for ${brand}:`, data); // Debug: check data
-          
           data.forEach(p => {
-            // Use brand from response or fallback to the loop brand
-            const productBrand = p.brand || brand;
-            
-            // Build image path: src/img/brand/imagename
-            const productImg = `src/img/${productBrand}/${p.image}`;
-            
+            const productImg = `src/img/${brand}/${p.image}`;
             const formattedPrice = parseFloat(p.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             
             const card = document.createElement('div');
             card.className = 'product-card';
             card.innerHTML = `
-              <img src="${productImg}" alt="${p.name}" onerror="this.onerror=null; this.src='src/img/placeholder.png'; console.log('Image not found: ${productImg}');">
+              <img src="${productImg}" alt="${p.name}">
               <h3>${p.name}</h3>
               <p>₱${formattedPrice}</p>
-              <button class="add-cart-btn" onclick="addToCart(${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${productBrand}/${p.image}', '${productBrand}')">
+              <button class="add-cart-btn" onclick="addToCart(${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${brand}/${p.image}', '${brand}')">
                 <i class="fas fa-shopping-cart"></i> Add to Cart
               </button>
             `;
             productList.appendChild(card);
           });
-        })
-        .catch(err => console.error(`Error fetching ${brand} products:`, err));
+        });
     });
 
     // Countdown timer function
