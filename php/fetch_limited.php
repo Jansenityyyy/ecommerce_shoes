@@ -1,32 +1,40 @@
 <?php
 include 'connect.php';
 
-// Set timezone to Manila
-date_default_timezone_set('Asia/Manila');
+header('Content-Type: application/json');
 
-// Get today's date
-$today = date('Y-m-d');
+$allowed_brands = ['nike', 'adidas', 'puma'];
 
-// Fetch the currently active limited product
-$sql = "SELECT * FROM limited_products WHERE start_date <= ? AND end_date >= ? LIMIT 1";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "ss", $today, $today);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+$brand = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
 
-// Return product as JSON
-if($result && mysqli_num_rows($result) > 0){
-    $product = mysqli_fetch_assoc($result);
-    
-    // Optional: make price formatted here if you want PHP-side formatting
-    $product['price'] = number_format($product['price'], 2, '.', ','); 
+$products = [];
 
-    echo json_encode($product, JSON_UNESCAPED_UNICODE);
-} else {
-    echo json_encode(null); // no active limited product today
+function fetchBrandProducts($conn, $table) {
+    $table = mysqli_real_escape_string($conn, $table);
+    $sql = "SELECT * FROM `$table`";
+    $result = mysqli_query($conn, $sql);
+    $rows = [];
+
+    if($result){
+        while($row = mysqli_fetch_assoc($result)){
+            $row['price'] = floatval($row['price']);
+            // Add brand to each product so we know the folder
+            $row['brand'] = $table;
+            $rows[] = $row;
+        }
+    }
+    return $rows;
 }
 
-// Close connection
-mysqli_stmt_close($stmt);
+if($brand != 'all' && in_array($brand, $allowed_brands)){
+    $products = fetchBrandProducts($conn, $brand);
+} else {
+    foreach($allowed_brands as $b){
+        $products = array_merge($products, fetchBrandProducts($conn, $b));
+    }
+}
+
+echo json_encode($products, JSON_UNESCAPED_UNICODE);
+
 mysqli_close($conn);
 ?>

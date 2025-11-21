@@ -26,6 +26,25 @@ CREATE TABLE puma (
 );
 
 
+-- Cart Table
+CREATE TABLE IF NOT EXISTS cart (
+    id INT PRIMARY KEY AUTO_INCREMENT, 
+    user_id INT NOT NULL, 
+    product_id INT NOT NULL, 
+    product_name VARCHAR(255) NOT NULL, 
+    product_price DECIMAL(10,2) NOT NULL, 
+    product_image VARCHAR(255) NOT NULL, 
+    product_brand VARCHAR(50) NOT NULL, 
+    quantity INT DEFAULT 1, 
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ) 
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX idx_user_id ON cart(user_id);
+CREATE INDEX idx_product_id ON cart(product_id);
+
+
+
 
 -- Nike Sample Products
 INSERT INTO nike (name, price, image, description) VALUES
