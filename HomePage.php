@@ -130,7 +130,55 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.2);
       margin: 8px 0;
     }
+/* Cart Badge */
+.cart-link {
+  position: relative;
+}
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #ff9d00;
+  color: #111;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 50%;
+  min-width: 18px;
+  text-align: center;
+  display: none;
+}
 
+/* Notification Toast */
+.notification-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 157, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+  z-index: 9999;
+}
+.notification-toast.show {
+  transform: translateX(0);
+}
+.notification-toast.success i {
+  color: #4caf50;
+  font-size: 1.3rem;
+}
+.notification-toast.error i {
+  color: #ff6b6b;
+  font-size: 1.3rem;
+}
     /* Login Link Style */
     nav .nav-links li a.login-link {
       display: flex;
@@ -171,9 +219,9 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   <nav>
     <div class="logo">SenSneaks Inc.</div>
     <ul class="nav-links">
-      <li><a href="before.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
-      <li><a href="#"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+      <li><a href="before.php"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> Products</a></li>
+      <li><a href="cart.php"><i class="fas fa-shopping-cart"></i> Cart</a></li>
       
 <?php if($isLoggedIn): ?>
     <li class="user-menu">

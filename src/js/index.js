@@ -3,7 +3,6 @@ fetch('php/fetch_limited.php')
   .then(res => res.json())
   .then(product => {
     if(product){
-      // Image path is already "brand/filename.png" in database
       const limitedImg = `src/img/${product.image}`;
       document.getElementById('limited-img').src = limitedImg;
       document.getElementById('limited-name').innerText = product.name;
@@ -15,6 +14,10 @@ fetch('php/fetch_limited.php')
         maximumFractionDigits: 2
       });
       document.getElementById('limited-price').innerText = `₱${formattedPrice}`;
+      
+      // Store limited product data for cart
+      document.getElementById('shop-now').dataset.productId = product.id;
+      document.getElementById('shop-now').dataset.brand = product.brand;
       
       if(product.end_date){
         document.getElementById('countdown-container').style.display = 'block';
@@ -65,8 +68,9 @@ fetch('php/fetch_products.php?brand=all')
     let html = '';
 
     products.forEach(p => {
-      // Database already has "nike/5.png", just add "src/img/"
       const productImg = `src/img/${p.image}`;
+      // Extract brand from image path (e.g., "nike/5.png" -> "nike")
+      const brand = p.image.split('/')[0];
 
       const priceNum = parseFloat(p.price.toString().replace(/,/g, ''));
       const formattedPrice = priceNum.toLocaleString('en-PH', {
@@ -79,7 +83,7 @@ fetch('php/fetch_products.php?brand=all')
           <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
           <h3>${p.name}</h3>
           <p class="price">₱${formattedPrice}</p>
-          <button class="add-cart-btn" onclick="addToCart(${p.id})">
+          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}')">
             <i class="fas fa-cart-plus"></i> Add to Cart
           </button>
         </div>
@@ -91,7 +95,82 @@ fetch('php/fetch_products.php?brand=all')
   .catch(err => console.error('Error fetching products:', err));
 
 
-// Add to Cart
-function addToCart(productId) {
-  alert('Added product #' + productId + ' to cart!');
+// Add to Cart Function
+async function addToCart(productId, brand) {
+  try {
+    const formData = new FormData();
+    formData.append('action', 'add');
+    formData.append('product_id', productId);
+    formData.append('brand', brand);
+    formData.append('quantity', 1);
+
+    const res = await fetch('php/cart.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      showNotification('Added to cart!', 'success');
+      updateCartBadge();
+    } else {
+      // Not logged in
+      showNotification(data.message, 'error');
+      setTimeout(() => {
+        window.location.href = 'login.php?redirect=Homepage.php';
+      }, 1500);
+    }
+  } catch (err) {
+    console.error('Error adding to cart:', err);
+    showNotification('Error adding to cart', 'error');
+  }
 }
+
+
+// Update Cart Badge
+async function updateCartBadge() {
+  try {
+    const res = await fetch('php/cart.php?action=count');
+    const data = await res.json();
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+      badge.textContent = data.count || 0;
+      badge.style.display = data.count > 0 ? 'block' : 'none';
+    }
+  } catch (err) {
+    // User not logged in, ignore
+  }
+}
+
+
+// Show Notification Toast
+function showNotification(message, type = 'success') {
+  // Remove existing notification
+  const existing = document.querySelector('.notification-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = `notification-toast ${type}`;
+  toast.innerHTML = `
+    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+    <span>${message}</span>
+  `;
+  
+  document.body.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => toast.classList.add('show'), 10);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+
+// Initialize cart badge on page load
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartBadge();
+});
