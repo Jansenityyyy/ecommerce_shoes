@@ -115,10 +115,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       animation: pulse 2s infinite;
     }
     .cart-badge.hidden { display: none; }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
 
     /* Notification Toast */
     .notification-toast {
@@ -143,6 +139,277 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     .notification-toast.success i { color: #4caf50; font-size: 1.3rem; }
     .notification-toast.error i { color: #ff6b6b; font-size: 1.3rem; }
 
+    /* ============ LIMITED PRODUCT SECTION REDESIGN ============ */
+    #limited-product {
+      padding: 120px 50px 60px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #limited-product::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 157, 0, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .limited-wrapper {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* Product Card */
+    .limited-card {
+      display: flex;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 157, 0, 0.15);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .limited-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(135deg, #ff3d00, #ff9d00);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(255, 61, 0, 0.4);
+      z-index: 10;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 4px 15px rgba(255, 61, 0, 0.4); }
+      50% { box-shadow: 0 4px 25px rgba(255, 61, 0, 0.7); }
+    }
+
+    .limited-card img {
+      width: 45%;
+      object-fit: cover;
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 30px;
+    }
+
+    .limited-info {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .limited-info h2 {
+      font-size: 2rem;
+      color: #fff;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+
+    .limited-info .product-desc {
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .limited-info .product-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ff9d00;
+      margin-bottom: 25px;
+    }
+
+    .limited-info .product-price .old-price {
+      font-size: 1.2rem;
+      color: #666;
+      text-decoration: line-through;
+      margin-left: 10px;
+      font-weight: 400;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-buy, .btn-cart {
+      padding: 15px 35px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, #ff9d00, #ff7700);
+      color: #111;
+      box-shadow: 0 4px 20px rgba(255, 157, 0, 0.4);
+    }
+
+    .btn-buy:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(255, 157, 0, 0.6);
+    }
+
+    .btn-cart {
+      background: transparent;
+      color: #ff9d00;
+      border: 2px solid #ff9d00;
+    }
+
+    .btn-cart:hover {
+      background: rgba(255, 157, 0, 0.1);
+      transform: translateY(-3px);
+    }
+
+    /* ============ COUNTDOWN TIMER REDESIGN ============ */
+    .countdown-section {
+      background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 100, 0, 0.05));
+      border: 1px solid rgba(255, 157, 0, 0.2);
+      border-radius: 25px;
+      padding: 35px 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .countdown-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff9d00, #ff5500, #ff9d00);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .countdown-header {
+      margin-bottom: 25px;
+    }
+
+    .countdown-header i {
+      font-size: 2.5rem;
+      color: #ff9d00;
+      margin-bottom: 10px;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .countdown-header h3 {
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .countdown-header p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .countdown-timer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .countdown-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      padding: 20px 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .countdown-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff9d00, transparent);
+    }
+
+    .countdown-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ff9d00;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
+      font-family: 'Poppins', monospace;
+    }
+
+    .countdown-label {
+      color: #888;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    .countdown-urgency {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: rgba(255, 61, 0, 0.2);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 61, 0, 0.3);
+    }
+
+    .countdown-urgency p {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .countdown-urgency i {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
     /* Add to Cart Button - Product Cards */
     .product-card .add-cart-btn {
       width: 100%;
@@ -162,54 +429,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
     }
+
     .product-card .add-cart-btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
-      background: linear-gradient(135deg, #ffb033, #ff8800);
-    }
-    .product-card .add-cart-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 10px rgba(255, 157, 0, 0.3);
-    }
-    .product-card .add-cart-btn i { font-size: 1rem; }
-
-    /* Limited Product Buttons */
-    .limited-info .btn-group {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .limited-info .btn-buy,
-    .limited-info .btn-cart {
-      padding: 15px 35px;
-      border: none;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-    }
-    .limited-info .btn-buy {
-      background: linear-gradient(135deg, #ff9d00, #ff7700);
-      color: #111;
-      box-shadow: 0 4px 20px rgba(255, 157, 0, 0.4);
-    }
-    .limited-info .btn-buy:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(255, 157, 0, 0.6);
-    }
-    .limited-info .btn-cart {
-      background: transparent;
-      color: #ff9d00;
-      border: 2px solid #ff9d00;
-    }
-    .limited-info .btn-cart:hover {
-      background: rgba(255, 157, 0, 0.1);
-      transform: translateY(-3px);
     }
 
     /* Login Link Style */
@@ -223,19 +446,40 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       border: 1px solid rgba(255, 157, 0, 0.2);
       transition: all 0.3s ease;
     }
+
     nav .nav-links li a.login-link:hover {
       background: rgba(255, 157, 0, 0.2);
       border-color: #ff9d00;
     }
 
     /* Responsive */
+    @media (max-width: 1100px) {
+      .limited-wrapper {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .countdown-section {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .countdown-timer {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
     @media (max-width: 768px) {
+      #limited-product { padding: 100px 20px 40px; }
+      .limited-card { flex-direction: column; }
+      .limited-card img { width: 100%; height: 250px; }
+      .limited-info { padding: 25px; }
+      .limited-info h2 { font-size: 1.5rem; }
+      .limited-info .product-price { font-size: 1.8rem; }
+      .btn-group { flex-direction: column; }
+      .btn-buy, .btn-cart { width: 100%; justify-content: center; }
       .user-name { display: none; }
       .user-display { padding: 8px 12px; }
-      .dropdown-menu { right: -10px; }
-      .limited-info .btn-group { flex-direction: column; }
-      .limited-info .btn-buy,
-      .limited-info .btn-cart { width: 100%; justify-content: center; }
+      .countdown-timer { grid-template-columns: repeat(2, 1fr); }
+      .countdown-number { font-size: 2rem; }
     }
   </style>
 </head>
@@ -279,41 +523,52 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
   <!-- Hero / Limited Product -->
   <section id="limited-product">
-    <div class="container">
+    <div class="limited-wrapper">
+      <!-- Product Card -->
       <div class="limited-card">
+        <span class="limited-badge"><i class="fas fa-bolt"></i> Limited Offer</span>
         <img id="limited-img" src="" alt="Limited Shoe">
         <div class="limited-info">
           <h2 id="limited-name">Loading…</h2>
-          <p id="limited-desc"></p>
-          <p id="limited-price"></p>
-          
-          <!-- Countdown Timer -->
-          <div class="countdown-container" id="countdown-container" style="display: none;">
-            <div class="countdown-label"><i class="fas fa-clock"></i> Offer Ends In:</div>
-            <div class="countdown-timer">
-              <div class="countdown-box">
-                <div class="countdown-number" id="days">00</div>
-                <div class="countdown-text">Days</div>
-              </div>
-              <div class="countdown-box">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-text">Hours</div>
-              </div>
-              <div class="countdown-box">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-text">Minutes</div>
-              </div>
-              <div class="countdown-box">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-text">Seconds</div>
-              </div>
-            </div>
-          </div>
+          <p class="product-desc" id="limited-desc"></p>
+          <p class="product-price" id="limited-price"></p>
           
           <div class="btn-group">
             <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
             <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Countdown Timer (Outside the card) -->
+      <div class="countdown-section" id="countdown-container" style="display: none;">
+        <div class="countdown-header">
+          <i class="fas fa-fire-flame-curved"></i>
+          <h3>Hurry Up!</h3>
+          <p>Offer ends soon</p>
+        </div>
+        
+        <div class="countdown-timer">
+          <div class="countdown-box">
+            <div class="countdown-number" id="days">00</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="hours">00</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="minutes">00</div>
+            <div class="countdown-label">Mins</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="seconds">00</div>
+            <div class="countdown-label">Secs</div>
+          </div>
+        </div>
+
+        <div class="countdown-urgency">
+          <p><i class="fas fa-exclamation-circle"></i> Limited stock available!</p>
         </div>
       </div>
     </div>
@@ -338,7 +593,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
           </div>
         </div>
         <div class="footer-col-2">
-          <a href="before.html"><img src="src/img/Black and Orange Shoe Brand Logo.png" alt="Logo"></a>
+          <a href="before.php"><img src="src/img/Black and Orange Shoe Brand Logo.png" alt="Logo"></a>
           <p>SenSneaks Inc.—stepping up your style with premium comfort, trendsetting designs, and exclusive footwear for every occasion.</p>
         </div>
         <div class="footer-col-3">
