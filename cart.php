@@ -288,6 +288,7 @@ if (!$isLoggedIn) {
         </div>
     </div>
 
+    <script src="src/js/index.js"></script>
     <script>
         const SHIPPING_FEE = 150;
 
@@ -459,6 +460,7 @@ if (!$isLoggedIn) {
         document.getElementById('checkout-btn').addEventListener('click', () => {
             window.location.href = 'checkout.php';
         });
+
     </script>
 </body>
 </html>
