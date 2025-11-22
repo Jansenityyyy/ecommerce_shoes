@@ -1,8 +1,13 @@
+// Store limited product data globally
+let limitedProductData = null;
+
 // Fetch Limited Product
 fetch('php/fetch_limited.php')
   .then(res => res.json())
   .then(product => {
     if(product){
+      limitedProductData = product;
+      
       const limitedImg = `src/img/${product.image}`;
       document.getElementById('limited-img').src = limitedImg;
       document.getElementById('limited-name').innerText = product.name;
@@ -15,9 +20,13 @@ fetch('php/fetch_limited.php')
       });
       document.getElementById('limited-price').innerText = `₱${formattedPrice}`;
       
-      // Store limited product data for cart
-      document.getElementById('shop-now').dataset.productId = product.id;
-      document.getElementById('shop-now').dataset.brand = product.brand;
+      // Add click handler for limited product "Add to Cart"
+      const limitedCartBtn = document.getElementById('limited-add-cart');
+      if (limitedCartBtn) {
+        limitedCartBtn.addEventListener('click', () => {
+          addToCart(product.id, product.brand);
+        });
+      }
       
       if(product.end_date){
         document.getElementById('countdown-container').style.display = 'block';
@@ -115,7 +124,6 @@ async function addToCart(productId, brand) {
       showNotification('Added to cart!', 'success');
       updateCartBadge();
     } else {
-      // Not logged in
       showNotification(data.message, 'error');
       setTimeout(() => {
         window.location.href = 'login.php?redirect=Homepage.php';
@@ -135,18 +143,23 @@ async function updateCartBadge() {
     const data = await res.json();
     const badge = document.getElementById('cart-badge');
     if (badge) {
-      badge.textContent = data.count || 0;
-      badge.style.display = data.count > 0 ? 'block' : 'none';
+      const count = data.count || 0;
+      badge.textContent = count;
+      if (count > 0) {
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
     }
   } catch (err) {
-    // User not logged in, ignore
+    const badge = document.getElementById('cart-badge');
+    if (badge) badge.classList.add('hidden');
   }
 }
 
 
 // Show Notification Toast
 function showNotification(message, type = 'success') {
-  // Remove existing notification
   const existing = document.querySelector('.notification-toast');
   if (existing) existing.remove();
 
@@ -158,11 +171,7 @@ function showNotification(message, type = 'success') {
   `;
   
   document.body.appendChild(toast);
-  
-  // Trigger animation
   setTimeout(() => toast.classList.add('show'), 10);
-  
-  // Remove after 3 seconds
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);

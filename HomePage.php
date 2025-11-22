@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Check if user is logged in
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 ?>
@@ -12,27 +11,16 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SenSneaks Inc. - Premium Footwear</title>
 
-  <!-- Main CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Google Fonts actually used -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Amsterdam+One&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
   <style>
     /* User Dropdown Styles */
-    .user-menu {
-      position: relative;
-    }
-
+    .user-menu { position: relative; }
     .user-display {
       display: flex;
       align-items: center;
@@ -45,13 +33,11 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.1);
       border: 1px solid rgba(255, 157, 0, 0.2);
     }
-
     .user-display:hover {
       background: rgba(255, 157, 0, 0.2);
       border-color: #ff9d00;
       color: #fff;
     }
-
     .user-avatar {
       width: 35px;
       height: 35px;
@@ -64,21 +50,9 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       color: #111;
       font-size: 1rem;
     }
-
-    .user-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .dropdown-arrow {
-      font-size: 0.7rem;
-      transition: transform 0.3s ease;
-    }
-
-    .user-menu.active .dropdown-arrow {
-      transform: rotate(180deg);
-    }
-
+    .user-name { font-weight: 600; font-size: 0.95rem; }
+    .dropdown-arrow { font-size: 0.7rem; transition: transform 0.3s ease; }
+    .user-menu.active .dropdown-arrow { transform: rotate(180deg); }
     .dropdown-menu {
       position: absolute;
       top: 120%;
@@ -96,13 +70,11 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       transition: all 0.3s ease;
       z-index: 1000;
     }
-
     .user-menu.active .dropdown-menu {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
     }
-
     .dropdown-menu a {
       display: flex;
       align-items: center;
@@ -113,72 +85,133 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       transition: all 0.3s ease;
       font-size: 0.95rem;
     }
+    .dropdown-menu a:hover { background: rgba(255, 157, 0, 0.1); color: #ff9d00; }
+    .dropdown-menu a i { width: 20px; text-align: center; color: #ff9d00; }
+    .dropdown-divider { height: 1px; background: rgba(255, 157, 0, 0.2); margin: 8px 0; }
 
-    .dropdown-menu a:hover {
+    /* Cart Link with Badge */
+    .cart-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -10px;
+      right: -12px;
+      background: linear-gradient(135deg, #ff9d00, #ff6600);
+      color: #111;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 50%;
+      min-width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(255, 157, 0, 0.4);
+      animation: pulse 2s infinite;
+    }
+    .cart-badge.hidden { display: none; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Notification Toast */
+    .notification-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1c1c1c;
+      border: 1px solid rgba(255, 157, 0, 0.3);
+      border-radius: 10px;
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-weight: 500;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      z-index: 9999;
+    }
+    .notification-toast.show { transform: translateX(0); }
+    .notification-toast.success i { color: #4caf50; font-size: 1.3rem; }
+    .notification-toast.error i { color: #ff6b6b; font-size: 1.3rem; }
+
+    /* Add to Cart Button - Product Cards */
+    .product-card .add-cart-btn {
+      width: 100%;
+      padding: 12px 20px;
+      margin-top: 15px;
+      background: linear-gradient(135deg, #ff9d00, #ff7700);
+      border: none;
+      border-radius: 25px;
+      color: #111;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
+    }
+    .product-card .add-cart-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
+      background: linear-gradient(135deg, #ffb033, #ff8800);
+    }
+    .product-card .add-cart-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(255, 157, 0, 0.3);
+    }
+    .product-card .add-cart-btn i { font-size: 1rem; }
+
+    /* Limited Product Buttons */
+    .limited-info .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .limited-info .btn-buy,
+    .limited-info .btn-cart {
+      padding: 15px 35px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    .limited-info .btn-buy {
+      background: linear-gradient(135deg, #ff9d00, #ff7700);
+      color: #111;
+      box-shadow: 0 4px 20px rgba(255, 157, 0, 0.4);
+    }
+    .limited-info .btn-buy:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(255, 157, 0, 0.6);
+    }
+    .limited-info .btn-cart {
+      background: transparent;
+      color: #ff9d00;
+      border: 2px solid #ff9d00;
+    }
+    .limited-info .btn-cart:hover {
       background: rgba(255, 157, 0, 0.1);
-      color: #ff9d00;
+      transform: translateY(-3px);
     }
 
-    .dropdown-menu a i {
-      width: 20px;
-      text-align: center;
-      color: #ff9d00;
-    }
-
-    .dropdown-divider {
-      height: 1px;
-      background: rgba(255, 157, 0, 0.2);
-      margin: 8px 0;
-    }
-/* Cart Badge */
-.cart-link {
-  position: relative;
-}
-.cart-badge {
-  position: absolute;
-  top: -8px;
-  right: -12px;
-  background: #ff9d00;
-  color: #111;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 50%;
-  min-width: 18px;
-  text-align: center;
-  display: none;
-}
-
-/* Notification Toast */
-.notification-toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #1c1c1c;
-  border: 1px solid rgba(255, 157, 0, 0.3);
-  border-radius: 10px;
-  padding: 15px 25px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #fff;
-  font-weight: 500;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  transform: translateX(120%);
-  transition: transform 0.3s ease;
-  z-index: 9999;
-}
-.notification-toast.show {
-  transform: translateX(0);
-}
-.notification-toast.success i {
-  color: #4caf50;
-  font-size: 1.3rem;
-}
-.notification-toast.error i {
-  color: #ff6b6b;
-  font-size: 1.3rem;
-}
     /* Login Link Style */
     nav .nav-links li a.login-link {
       display: flex;
@@ -190,7 +223,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       border: 1px solid rgba(255, 157, 0, 0.2);
       transition: all 0.3s ease;
     }
-
     nav .nav-links li a.login-link:hover {
       background: rgba(255, 157, 0, 0.2);
       border-color: #ff9d00;
@@ -198,17 +230,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
     /* Responsive */
     @media (max-width: 768px) {
-      .user-name {
-        display: none;
-      }
-
-      .user-display {
-        padding: 8px 12px;
-      }
-
-      .dropdown-menu {
-        right: -10px;
-      }
+      .user-name { display: none; }
+      .user-display { padding: 8px 12px; }
+      .dropdown-menu { right: -10px; }
+      .limited-info .btn-group { flex-direction: column; }
+      .limited-info .btn-buy,
+      .limited-info .btn-cart { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -221,7 +248,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <ul class="nav-links">
       <li><a href="before.php"><i class="fas fa-home"></i> Home</a></li>
       <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> Products</a></li>
-      <li><a href="cart.php"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+      <li>
+        <a href="cart.php" class="cart-link">
+          <i class="fas fa-shopping-cart"></i> Cart
+          <span class="cart-badge hidden" id="cart-badge">0</span>
+        </a>
+      </li>
       
 <?php if($isLoggedIn): ?>
     <li class="user-menu">
@@ -278,8 +310,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
             </div>
           </div>
           
-          <button id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
-          <button><i class="fas fa-shopping-cart"Add cart></i>Add to Cart</button>
+          <div class="btn-group">
+            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
+            <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+          </div>
         </div>
       </div>
     </div>
@@ -296,9 +330,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <div class="container">
       <div class="row">
         <div class="footer-col-1">
-          <a href="">
-            <h3>Download Our App</h3>
-          </a>
+          <a href=""><h3>Download Our App</h3></a>
           <p>Download App for Android and ios</p>
           <div class="app-logo">
             <img src="src/img/d1.png" alt="Play Store">
@@ -307,29 +339,24 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
         </div>
         <div class="footer-col-2">
           <a href="before.html"><img src="src/img/Black and Orange Shoe Brand Logo.png" alt="Logo"></a>
-          <p>SenSneaks Inc.—stepping up your style with premium comfort, trendsetting designs, and exclusive footwear for
-            every occasion.</p>
+          <p>SenSneaks Inc.—stepping up your style with premium comfort, trendsetting designs, and exclusive footwear for every occasion.</p>
         </div>
         <div class="footer-col-3">
           <h3>Useful Links</h3>
           <ul>
-            <li><i class="fa-solid fa-ticket fa-1g"></i> Coupons</li>
-            <li><i class="fa-solid fa-undo fa-1g"></i> Return Policy</li>
-            <li><i class="fa-solid fa-comment fa-1g"></i> Feedback</li>
-            <li><i class="fa-solid fa-handshake fa-1g"></i> Join Affiliate</li>
+            <li><i class="fa-solid fa-ticket"></i> Coupons</li>
+            <li><i class="fa-solid fa-undo"></i> Return Policy</li>
+            <li><i class="fa-solid fa-comment"></i> Feedback</li>
+            <li><i class="fa-solid fa-handshake"></i> Join Affiliate</li>
           </ul>
         </div>
         <div class="footer-col-4">
           <h3>Follow us</h3>
           <ul>
-            <li><a href="admin/index.php">
-                <i class="fa-brands fa-facebook fa-1g"></i> Facebook</a></li>
-            <li><a href="https://www.instagram.com/JansenMark04">
-                <i class="fa-brands fa-instagram fa-1g"></i> Instagram</a></li>
-            <li><a href="https://www.youtube.com/JansenMark04">
-                <i class="fa-brands fa-youtube fa-1g"></i> YouTube</a></li>
-            <li><a href="https://www.tiktok.com/@JansenMark04">
-                <i class="fa-brands fa-tiktok fa-1g"></i> TikTok</a></li>
+            <li><a href="admin/index.php"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
+            <li><a href="https://www.instagram.com/JansenMark04"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
+            <li><a href="https://www.youtube.com/JansenMark04"><i class="fa-brands fa-youtube"></i> YouTube</a></li>
+            <li><a href="https://www.tiktok.com/@JansenMark04"><i class="fa-brands fa-tiktok"></i> TikTok</a></li>
           </ul>
         </div>
       </div>
@@ -338,17 +365,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     </div>
   </div>
   
-  <!-- JS -->
   <script src="src/js/index.js"></script>
   
   <script>
-    // Toggle Dropdown Menu
     function toggleDropdown() {
-      const userMenu = document.querySelector('.user-menu');
-      userMenu.classList.toggle('active');
+      document.querySelector('.user-menu').classList.toggle('active');
     }
-
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(event) {
       const userMenu = document.querySelector('.user-menu');
       if (userMenu && !userMenu.contains(event.target)) {
@@ -358,5 +380,4 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   </script>
 
 </body>
-
 </html>

@@ -235,7 +235,7 @@ if (!$isLoggedIn) {
             <li>
                 <a href="cart.php" class="cart-link">
                     <i class="fas fa-shopping-cart"></i> Cart
-                    <span class="cart-badge" id="cart-badge">0</span>
+                    <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
             </li>
             <li class="user-menu">
@@ -288,7 +288,6 @@ if (!$isLoggedIn) {
         </div>
     </div>
 
-    <script src="src/js/index.js"></script>
     <script>
         const SHIPPING_FEE = 150;
 
@@ -438,8 +437,13 @@ if (!$isLoggedIn) {
                 const res = await fetch('php/cart.php?action=count');
                 const data = await res.json();
                 const badge = document.getElementById('cart-badge');
-                badge.textContent = data.count || 0;
-                badge.style.display = data.count > 0 ? 'block' : 'none';
+                const count = data.count || 0;
+                badge.textContent = count;
+                if (count > 0) {
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
             } catch (err) {
                 console.error('Error getting cart count:', err);
             }
@@ -460,7 +464,6 @@ if (!$isLoggedIn) {
         document.getElementById('checkout-btn').addEventListener('click', () => {
             window.location.href = 'checkout.php';
         });
-
     </script>
 </body>
 </html>
