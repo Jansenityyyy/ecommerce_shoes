@@ -287,7 +287,7 @@ if (!$isLoggedIn) {
             </div>
         </div>
     </div>
-
+<script src="src/js/index.js"></script>
     <script>
         const SHIPPING_FEE = 150;
 
