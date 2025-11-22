@@ -1,3 +1,9 @@
+<?php
+session_start();
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$username = $isLoggedIn ? $_SESSION['username'] : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,8 +26,8 @@
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#features">Products</a></li>
+            <li><a href="Before.php">Home</a></li>
+            <li><a href="HomePage.Php">Products</a></li>
             <li><a href="#features">Cart</a></li>
             <li><a href="login.php">Login</a></li>
         </ul>
