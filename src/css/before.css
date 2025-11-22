@@ -39,7 +39,8 @@ nav .logo {
 nav .nav-links {
     list-style: none;
     display: flex;
-    gap: 35px;
+    align-items: center;
+    gap: 30px;
 }
 
 nav .nav-links li a {
@@ -49,6 +50,9 @@ nav .nav-links li a {
     font-size: 1rem;
     transition: all 0.3s ease;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 nav .nav-links li a:hover {
@@ -68,6 +72,13 @@ nav .nav-links li a::after {
 
 nav .nav-links li a:hover::after {
     width: 100%;
+}
+
+/* Remove underline effect from special links */
+nav .nav-links li a.cart-link::after,
+nav .nav-links li a.login-link::after,
+nav .nav-links li .user-display::after {
+    display: none;
 }
 
 /* Hero Section */
@@ -198,6 +209,14 @@ nav .nav-links li a:hover::after {
     font-size: 2.5rem;
     margin-bottom: 60px;
     color: #ff9d00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.features h2 i {
+    font-size: 2rem;
 }
 
 .features-grid {
@@ -274,6 +293,14 @@ nav .nav-links li a:hover::after {
 .footer h3 {
     color: #ffffff;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.footer h3 i {
+    color: #ff9d00;
 }
 
 .footer-col-1,
@@ -304,6 +331,27 @@ nav .nav-links li a:hover::after {
     text-align: center;
 }
 
+.footer-col-3 ul li,
+.footer-col-4 ul li {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.footer-col-3 ul li:hover,
+.footer-col-4 ul li:hover {
+    color: #ff9d00;
+}
+
+.footer-col-3 ul li i,
+.footer-col-4 ul li i {
+    color: #ff9d00;
+    width: 20px;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -328,6 +376,12 @@ ul {
 
 .app-logo img {
     width: 110px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.app-logo img:hover {
+    transform: scale(1.05);
 }
 
 .footer hr {
@@ -353,7 +407,6 @@ ul {
         opacity: 0;
         transform: translateX(-50px);
     }
-
     to {
         opacity: 1;
         transform: translateX(0);
@@ -365,7 +418,6 @@ ul {
         opacity: 0;
         transform: translateX(50px);
     }
-
     to {
         opacity: 1;
         transform: translateX(0);
@@ -373,12 +425,9 @@ ul {
 }
 
 @keyframes float {
-
-    0%,
-    100% {
+    0%, 100% {
         transform: translateY(0);
     }
-
     50% {
         transform: translateY(-20px);
     }
@@ -387,51 +436,89 @@ ul {
 /* Responsive */
 @media (max-width: 768px) {
     nav {
-        padding: 15px 30px;
+        padding: 15px 20px;
     }
 
     nav .logo {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     nav .nav-links {
-        gap: 20px;
+        gap: 15px;
     }
 
     nav .nav-links li a {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     .hero {
-        padding: 80px 30px 30px;
+        padding: 100px 30px 30px;
     }
 
     .hero-content {
         flex-direction: column;
         gap: 40px;
+        text-align: center;
     }
 
     .hero-text h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     .hero-text h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .hero-text p {
         font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .hero-image img {
+        max-width: 350px;
     }
 
     .features {
-        padding: 60px 30px;
+        padding: 60px 20px;
     }
 
     .features h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .footer .container {
-        padding: 0 30px;
+        padding: 0 20px;
+    }
+
+    .footer .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-col-1,
+    .footer-col-2,
+    .footer-col-3,
+    .footer-col-4 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav .nav-links {
+        gap: 10px;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .cta-button {
+        padding: 15px 30px;
+        font-size: 1rem;
     }
 }
