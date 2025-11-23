@@ -420,7 +420,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="admin.php"><i class="fas fa-plus"></i> Add Product</a></li>
             <li><a href="admin_products.php"><i class="fas fa-list"></i> Manage</a></li>
         </ul>
