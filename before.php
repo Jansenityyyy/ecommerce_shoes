@@ -170,6 +170,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
                     <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
             </li>
+            <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
             
 <?php if($isLoggedIn): ?>
             <li class="user-menu">

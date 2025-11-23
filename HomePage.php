@@ -492,13 +492,13 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <ul class="nav-links">
       <li><a href="before.php"><i class="fas fa-home"></i> Home</a></li>
       <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> Products</a></li>
-      <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
       <li>
         <a href="cart.php" class="cart-link">
           <i class="fas fa-shopping-cart"></i> Cart
           <span class="cart-badge hidden" id="cart-badge">0</span>
         </a>
       </li>
+      <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
       
 <?php if($isLoggedIn): ?>
     <li class="user-menu">
