@@ -238,6 +238,7 @@ if (!$isLoggedIn) {
                     <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
             </li>
+            <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
             <li class="user-menu">
                 <div class="user-display" onclick="toggleDropdown()">
                     <div class="user-avatar"><?= strtoupper(substr($username, 0, 1)) ?></div>
