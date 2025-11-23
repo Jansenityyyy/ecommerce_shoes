@@ -230,7 +230,7 @@ if (!$isLoggedIn) {
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="LandingPage"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="Homepage.php#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
             <li>
                 <a href="cart.php" class="cart-link">
