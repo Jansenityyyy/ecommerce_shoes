@@ -535,7 +535,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
           <p class="product-price" id="limited-price"></p>
           
           <div class="btn-group">
-            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!    </button>
+            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i>     Buy Now!    </button>
             <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
           </div>
         </div>
