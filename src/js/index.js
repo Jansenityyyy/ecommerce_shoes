@@ -27,6 +27,14 @@ fetch('php/fetch_limited.php')
           addToCart(product.id, product.brand);
         });
       }
+
+      // Add click handler for limited product "Buy Now"
+      const shopNowBtn = document.getElementById('shop-now');
+      if (shopNowBtn) {
+        shopNowBtn.addEventListener('click', () => {
+          buyNow(product.id, product.brand);
+        });
+      }
       
       if(product.end_date){
         document.getElementById('countdown-container').style.display = 'block';
@@ -132,6 +140,40 @@ async function addToCart(productId, brand) {
   } catch (err) {
     console.error('Error adding to cart:', err);
     showNotification('Error adding to cart', 'error');
+  }
+}
+
+
+// Buy Now Function - Add to cart then go to checkout
+async function buyNow(productId, brand) {
+  try {
+    const formData = new FormData();
+    formData.append('action', 'add');
+    formData.append('product_id', productId);
+    formData.append('brand', brand);
+    formData.append('quantity', 1);
+
+    const res = await fetch('php/cart.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      window.location.href = 'checkout.php';
+    } else {
+      showNotification(data.message, 'error');
+      setTimeout(() => {
+        window.location.href = 'login.php?redirect=Homepage.php';
+      }, 1500);
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    showNotification('Please login first', 'error');
+    setTimeout(() => {
+      window.location.href = 'login.php?redirect=Homepage.php';
+    }, 1500);
   }
 }
 
