@@ -25,7 +25,7 @@ if ($user = mysqli_fetch_assoc($result)) {
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];
 
-        header("Location: ../HomePage.php?login=success");
+        header("Location: ../before.php?login=success");
         exit();
     } else {
         header("Location: ../login.php?error=invalid_password");
