@@ -490,7 +490,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   <nav>
     <div class="logo">SenSneaks Inc.</div>
     <ul class="nav-links">
-      <li><a href="before.php"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
       <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> Products</a></li>
       <li>
         <a href="cart.php" class="cart-link">

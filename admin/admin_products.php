@@ -411,7 +411,7 @@ mysqli_close($conn);
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="../HomePage.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="index.php"><i class="fas fa-plus"></i> Add Product</a></li>
             <li><a href="#"><i class="fas fa-list"></i> Manage</a></li>
         </ul>
