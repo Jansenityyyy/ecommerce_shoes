@@ -20,6 +20,103 @@ if (!$isLoggedIn) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        /* User Dropdown Styles */
+        .user-menu { position: relative; }
+        .user-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ff9d00;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 157, 0, 0.1);
+            border: 1px solid rgba(255, 157, 0, 0.2);
+        }
+        .user-display:hover {
+            background: rgba(255, 157, 0, 0.2);
+            border-color: #ff9d00;
+            color: #fff;
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9d00 0%, #ff7700 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #111;
+            font-size: 1rem;
+        }
+        .user-name { font-weight: 600; font-size: 0.95rem; }
+        .dropdown-arrow { font-size: 0.7rem; transition: transform 0.3s ease; }
+        .user-menu.active .dropdown-arrow { transform: rotate(180deg); }
+        .dropdown-menu {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: rgba(28, 28, 28, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 157, 0, 0.2);
+            border-radius: 15px;
+            padding: 10px 0;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .user-menu.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu a:hover { background: rgba(255, 157, 0, 0.1); color: #ff9d00; }
+        .dropdown-menu a i { width: 20px; text-align: center; color: #ff9d00; }
+        .dropdown-divider { height: 1px; background: rgba(255, 157, 0, 0.2); margin: 8px 0; }
+
+        /* Cart Badge */
+        .cart-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            background: linear-gradient(135deg, #ff9d00, #ff6600);
+            color: #111;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(255, 157, 0, 0.4);
+        }
+        .cart-badge.hidden { display: none; }
+
+        /* Cart Container */
         .cart-container {
             max-width: 1200px;
             margin: 120px auto 50px;
@@ -166,6 +263,10 @@ if (!$isLoggedIn) {
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         .checkout-btn:hover {
             transform: translateY(-2px);
@@ -208,21 +309,10 @@ if (!$isLoggedIn) {
         }
         .loading i { font-size: 2rem; }
 
-        /* Navbar cart badge */
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ff9d00;
-            color: #111;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 50%;
-            min-width: 18px;
-            text-align: center;
+        @media (max-width: 768px) {
+            .user-name { display: none; }
+            .cart-container { margin-top: 100px; }
         }
-        .cart-link { position: relative; }
     </style>
 </head>
 <body>
@@ -231,14 +321,13 @@ if (!$isLoggedIn) {
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
             <li><a href="LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="Homepage.php#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
+            <li><a href="HomePage.php#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
             <li>
                 <a href="cart.php" class="cart-link">
                     <i class="fas fa-shopping-cart"></i> Cart
                     <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
             </li>
-            <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
             <li class="user-menu">
                 <div class="user-display" onclick="toggleDropdown()">
                     <div class="user-avatar"><?= strtoupper(substr($username, 0, 1)) ?></div>
@@ -288,7 +377,7 @@ if (!$isLoggedIn) {
             </div>
         </div>
     </div>
-<script src="src/js/index.js"></script>
+
     <script>
         const SHIPPING_FEE = 150;
 
@@ -312,7 +401,7 @@ if (!$isLoggedIn) {
                             <i class="fas fa-shopping-cart"></i>
                             <h3>Your cart is empty</h3>
                             <p>Looks like you haven't added anything yet.</p>
-                            <a href="Homepage.php#other-products">
+                            <a href="HomePage.php#other-products">
                                 <i class="fas fa-shopping-bag"></i> Start Shopping
                             </a>
                         </div>
@@ -329,10 +418,6 @@ if (!$isLoggedIn) {
                     subtotal += itemTotal;
                     
                     const formattedPrice = item.price.toLocaleString('en-PH', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    const formattedTotal = itemTotal.toLocaleString('en-PH', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
@@ -452,8 +537,13 @@ if (!$isLoggedIn) {
 
         // Dropdown toggle
         function toggleDropdown() {
-            document.querySelector('.user-menu').classList.toggle('active');
+            const userMenu = document.querySelector('.user-menu');
+            if (userMenu) {
+                userMenu.classList.toggle('active');
+            }
         }
+
+        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             const menu = document.querySelector('.user-menu');
             if (menu && !menu.contains(e.target)) {
@@ -461,8 +551,9 @@ if (!$isLoggedIn) {
             }
         });
 
-        // Checkout button
-        document.getElementById('checkout-btn').addEventListener('click', () => {
+        // Checkout button - THIS IS THE IMPORTANT PART
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            console.log('Checkout button clicked!'); // Debug log
             window.location.href = 'checkout.php';
         });
     </script>
