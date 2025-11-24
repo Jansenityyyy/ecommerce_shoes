@@ -611,12 +611,35 @@ if (!$isLoggedIn) {
             formData.append('action', 'place_order');
             formData.append('items', JSON.stringify(cartItems));
 
+            // Debug: Log what we're sending
+            console.log('Sending order data:', {
+                items: cartItems,
+                form: Object.fromEntries(formData)
+            });
+
             try {
                 const res = await fetch('php/process_order.php', {
                     method: 'POST',
                     body: formData
                 });
-                const data = await res.json();
+
+                // Check if response is OK
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+
+                // Get response text first to check if it's valid JSON
+                const responseText = await res.text();
+                console.log('Response text:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    console.error('Response was:', responseText);
+                    throw new Error('Server returned invalid JSON. Check console for details.');
+                }
 
                 if (data.success) {
                     window.location.href = 'order_success.php?order=' + data.order_number;
@@ -627,7 +650,7 @@ if (!$isLoggedIn) {
                 }
             } catch (err) {
                 console.error('Error placing order:', err);
-                alert('Error placing order');
+                alert('Error placing order: ' + err.message);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-lock"></i> Place Order';
             }
