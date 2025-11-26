@@ -404,7 +404,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
         function startSlideshow() {
             // Change image every 4 seconds
-            slideInterval = setInterval(changeSlide, 4000);
+            slideInterval = setInterval(changeSlide, 1000);
         }
 
         // ========== USER DROPDOWN ==========
