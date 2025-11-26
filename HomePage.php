@@ -576,12 +576,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   </section>
 
   <!-- Other Products -->
-  <a href="product_detail.php?id=<?= $product['id'] ?>">
+  
   <section id="other-products">
     <h2><i class="fas fa-fire"></i> BEST SELLING SHOES!</h2>
     <div class="product-grid" id="productList"></div>
   </section>
-</a>
+
   <!-------------footer--------------->
   <div class="footer" id="contact">
     <div class="container">
