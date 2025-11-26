@@ -4,7 +4,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 
 // Database connection
-require_once 'php/config.php';
+require_once 'php/connect.php';
 
 // Get product ID from URL
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
