@@ -243,15 +243,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       margin-left: 10px;
       font-weight: 400;
     }
-    .product-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.limited-card, .limited-card * {
-  pointer-events: auto;
-}
 
     .btn-group {
       display: flex;
@@ -460,6 +451,15 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.2);
       border-color: #ff9d00;
     }
+    .app-logo img {
+    width: 110px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+    .app-logo img:hover {
+    transform: scale(1.05);
+} 
 
     /* Responsive */
     @media (max-width: 1100px) {
@@ -531,76 +531,65 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     </ul>
   </nav>
 
-<!-- Hero / Limited Product -->
-<section id="limited-product">
-  <div class="limited-wrapper">
-    <!-- Product Card -->
-    <a href="product_detail.php?id=<?= $product['id'] ?>" class="product-link">
+  <!-- Hero / Limited Product -->
+  <section id="limited-product">
+    <div class="limited-wrapper">
+      <!-- Product Card -->
       <div class="limited-card">
         <span class="limited-badge"><i class="fas fa-bolt"></i> Limited Offer</span>
-        <img id="limited-img" src="<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+        <img id="limited-img" src="" alt="Limited Shoe">
         <div class="limited-info">
-          <h2 id="limited-name"><?= htmlspecialchars($product['name']) ?></h2>
-          <p class="product-desc" id="limited-desc"><?= htmlspecialchars($product['description']) ?></p>
-          <p class="product-price" id="limited-price">₱<?= number_format($product['price'], 2) ?></p>
+          <h2 id="limited-name">Loading…</h2>
+          <p class="product-desc" id="limited-desc"></p>
+          <p class="product-price" id="limited-price"></p>
           
           <div class="btn-group">
-            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
-            <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i>     Buy Now!    </button> <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+            
           </div>
         </div>
       </div>
-    </a>
 
-    <!-- Countdown Timer (Outside the card) -->
-    <div class="countdown-section" id="countdown-container" style="display: none;">
-      <div class="countdown-header">
-        <i class="fas fa-fire-flame-curved"></i>
-        <h3>Hurry Up!</h3>
-        <p>Offer ends soon</p>
-      </div>
-      
-      <div class="countdown-timer">
-        <div class="countdown-box">
-          <div class="countdown-number" id="days">00</div>
-          <div class="countdown-label">Days</div>
+      <!-- Countdown Timer (Outside the card) -->
+      <div class="countdown-section" id="countdown-container" style="display: none;">
+        <div class="countdown-header">
+          <i class="fas fa-fire-flame-curved"></i>
+          <h3>Hurry Up!</h3>
+          <p>Offer ends soon</p>
         </div>
-        <div class="countdown-box">
-          <div class="countdown-number" id="hours">00</div>
-          <div class="countdown-label">Hours</div>
+        
+        <div class="countdown-timer">
+          <div class="countdown-box">
+            <div class="countdown-number" id="days">00</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="hours">00</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="minutes">00</div>
+            <div class="countdown-label">Mins</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="seconds">00</div>
+            <div class="countdown-label">Secs</div>
+          </div>
         </div>
-        <div class="countdown-box">
-          <div class="countdown-number" id="minutes">00</div>
-          <div class="countdown-label">Mins</div>
-        </div>
-        <div class="countdown-box">
-          <div class="countdown-number" id="seconds">00</div>
-          <div class="countdown-label">Secs</div>
-        </div>
-      </div>
 
-      <div class="countdown-urgency">
-        <p><i class="fas fa-exclamation-circle"></i> Limited stock available!</p>
+        <div class="countdown-urgency">
+          <p><i class="fas fa-exclamation-circle"></i> Limited stock available!</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Other Products -->
-<section id="other-products">
-  <h2><i class="fas fa-fire"></i> BEST SELLING SHOES!</h2>
-  <div class="product-grid" id="productList">
-    <?php foreach ($products as $product): ?>
-      <a href="product_detail.php?id=<?= $product['id'] ?>" class="product-link">
-        <div class="product-card">
-          <img src="<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-          <h3><?= htmlspecialchars($product['name']) ?></h3>
-          <p class="product-price">₱<?= number_format($product['price'], 2) ?></p>
-        </div>
-      </a>
-    <?php endforeach; ?>
-  </div>
-</section>
+  <!-- Other Products -->
+  
+  <section id="other-products">
+    <h2><i class="fas fa-fire"></i> BEST SELLING SHOES!</h2>
+    <div class="product-grid" id="productList"></div>
+  </section>
 
   <!-------------footer--------------->
   <div class="footer" id="contact">
