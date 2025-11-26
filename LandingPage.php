@@ -18,6 +18,44 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
+        /* Hero Image Slideshow */
+        .hero-image {
+            position: relative;
+        }
+        .hero-image img {
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-image img.fade-out {
+            opacity: 0;
+        }
+        .slideshow-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 157, 0, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot:hover {
+            background: rgba(255, 157, 0, 0.6);
+            transform: scale(1.1);
+        }
+        .dot.active {
+            background: #ff9d00;
+            transform: scale(1.2);
+            box-shadow: 0 0 10px rgba(255, 157, 0, 0.6);
+        }
+
         /* User Dropdown Styles */
         .user-menu { position: relative; }
         .user-display {
@@ -152,6 +190,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
             .dropdown-menu { right: -10px; }
             nav .nav-links { gap: 15px; }
             nav .nav-links li a span { display: none; }
+            .slideshow-dots { bottom: 10px; }
+            .dot { width: 10px; height: 10px; }
         }
     </style>
 </head>
@@ -207,7 +247,14 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
                 </a>
             </div>
             <div class="hero-image">
-                <img src="src/img/b.png" alt="Premium Sneakers">
+                <img src="src/img/b.png" alt="Premium Sneakers" id="hero-shoe">
+                <div class="slideshow-dots">
+                    <span class="dot active" onclick="goToSlide(0)"></span>
+                    <span class="dot" onclick="goToSlide(1)"></span>
+                    <span class="dot" onclick="goToSlide(2)"></span>
+                    <span class="dot" onclick="goToSlide(3)"></span>
+                    <span class="dot" onclick="goToSlide(4)"></span>
+                </div>
             </div>
         </div>
     </section>
@@ -295,7 +342,72 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     </div>
 
     <script>
-        // Toggle Dropdown Menu
+        // ========== SHOE SLIDESHOW ==========
+        const shoeImages = [
+            'src/img/b.png',           // Image 1 (current)
+            'src/img/nike/1.png',       // Image 2 - Replace with your actual path
+            'src/img/nike/2.png',       // Image 3 - Replace with your actual path
+            'src/img/nike/3.png',       // Image 4 - Replace with your actual path
+            'src/img/nike/4.png',        // Image 5 - Replace with your actual path
+        ];
+        let currentSlide = 0;
+        let slideInterval;
+
+        function changeSlide() {
+            const heroShoe = document.getElementById('hero-shoe');
+            const dots = document.querySelectorAll('.dot');
+            
+            // Fade out current image
+            heroShoe.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Move to next slide
+                currentSlide = (currentSlide + 1) % shoeImages.length;
+                
+                // Change image source
+                heroShoe.src = shoeImages[currentSlide];
+                
+                // Update active dot
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+                
+                // Fade in new image
+                heroShoe.classList.remove('fade-out');
+            }, 500);
+        }
+
+        function goToSlide(index) {
+            const heroShoe = document.getElementById('hero-shoe');
+            const dots = document.querySelectorAll('.dot');
+            
+            // Clear auto-advance interval
+            clearInterval(slideInterval);
+            
+            // Fade out
+            heroShoe.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentSlide = index;
+                heroShoe.src = shoeImages[currentSlide];
+                
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentSlide);
+                });
+                
+                heroShoe.classList.remove('fade-out');
+                
+                // Restart auto-advance after 4 seconds
+                slideInterval = setInterval(changeSlide, 4000);
+            }, 500);
+        }
+
+        function startSlideshow() {
+            // Change image every 4 seconds
+            slideInterval = setInterval(changeSlide, 4000);
+        }
+
+        // ========== USER DROPDOWN ==========
         function toggleDropdown() {
             const userMenu = document.querySelector('.user-menu');
             userMenu.classList.toggle('active');
@@ -309,7 +421,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
             }
         });
 
-        // Update Cart Badge
+        // ========== CART BADGE ==========
         async function updateCartBadge() {
             try {
                 const res = await fetch('php/cart.php?action=count');
@@ -331,9 +443,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
             }
         }
 
-        // Initialize on page load
+        // ========== INITIALIZE ==========
         document.addEventListener('DOMContentLoaded', () => {
             updateCartBadge();
+            startSlideshow(); // Start the shoe slideshow
         });
     </script>
 

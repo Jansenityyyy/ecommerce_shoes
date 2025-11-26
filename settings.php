@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 
 // Database connection
-require_once 'php/config.php';
+require_once 'php/connect.php';
 
 // Initialize messages
 $success_message = '';
