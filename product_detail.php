@@ -15,32 +15,44 @@ if ($product_id <= 0) {
 }
 
 // Fetch product details
-$stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $product_id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$product = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
+$stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$product = $result->fetch_assoc();
+$stmt->close();
 
 if (!$product) {
     header("Location: HomePage.php");
     exit();
 }
 
-// Extract brand from image path
-$brand = explode('/', $product['image'])[0];
+// Fetch product images (if you have a separate images table)
+$images_stmt = $conn->prepare("SELECT image_url FROM product_images WHERE product_id = ? ORDER BY display_order");
+$images_stmt->bind_param("i", $product_id);
+$images_stmt->execute();
+$images_result = $images_stmt->get_result();
+$product_images = [];
+while ($img = $images_result->fetch_assoc()) {
+    $product_images[] = $img['image_url'];
+}
+$images_stmt->close();
 
-// Fetch related products (same brand, excluding current product)
-$related_stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE image LIKE ? AND id != ? LIMIT 4");
-$brand_pattern = $brand . '%';
-mysqli_stmt_bind_param($related_stmt, "si", $brand_pattern, $product_id);
-mysqli_stmt_execute($related_stmt);
-$related_result = mysqli_stmt_get_result($related_stmt);
+// If no additional images, use main product image
+if (empty($product_images)) {
+    $product_images = [$product['image']];
+}
+
+// Fetch related products (same category, excluding current product)
+$related_stmt = $conn->prepare("SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4");
+$related_stmt->bind_param("si", $product['category'], $product_id);
+$related_stmt->execute();
+$related_result = $related_stmt->get_result();
 $related_products = [];
-while ($related = mysqli_fetch_assoc($related_result)) {
+while ($related = $related_result->fetch_assoc()) {
     $related_products[] = $related;
 }
-mysqli_stmt_close($related_stmt);
+$related_stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +62,6 @@ mysqli_stmt_close($related_stmt);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($product['name']) ?> - SenSneaks Inc.</title>
     <link rel="stylesheet" href="src/css/before.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -134,11 +145,6 @@ mysqli_stmt_close($related_stmt);
         }
 
         /* Product Detail Styles */
-        body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            min-height: 100vh;
-        }
-
         .product-container {
             max-width: 1400px;
             margin: 120px auto 50px;
@@ -189,6 +195,36 @@ mysqli_stmt_close($related_stmt);
             max-height: 500px;
         }
 
+        .thumbnail-images {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .thumbnail {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            border-color: #ff9d00;
+            transform: translateY(-5px);
+        }
+
+        .thumbnail.active {
+            border-color: #ff9d00;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
         .product-info {
             color: #fff;
         }
@@ -219,6 +255,24 @@ mysqli_stmt_close($related_stmt);
             font-weight: 600;
             margin-bottom: 10px;
             font-size: 1.1rem;
+        }
+
+        .option-group select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 157, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-group select:focus {
+            outline: none;
+            border-color: #ff9d00;
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .quantity-selector {
@@ -295,6 +349,12 @@ mysqli_stmt_close($related_stmt);
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .details-header:hover {
+            color: #ff9d00;
         }
 
         .details-header h3 {
@@ -384,28 +444,35 @@ mysqli_stmt_close($related_stmt);
             font-weight: 700;
         }
 
-        /* Notification */
-        .notification-toast {
+        /* Alert Messages */
+        .alert {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #1c1c1c;
-            border: 1px solid rgba(255, 157, 0, 0.3);
+            top: 100px;
+            right: 20px;
+            padding: 20px 30px;
             border-radius: 10px;
-            padding: 15px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            animation: slideIn 0.5s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #fff;
-            font-weight: 500;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-            z-index: 9999;
+            gap: 15px;
         }
-        .notification-toast.show { transform: translateX(0); }
-        .notification-toast.success i { color: #4caf50; font-size: 1.3rem; }
-        .notification-toast.error i { color: #ff6b6b; font-size: 1.3rem; }
+
+        .alert-success {
+            background: rgba(46, 204, 113, 0.95);
+            color: #fff;
+        }
+
+        .alert-error {
+            background: rgba(231, 76, 60, 0.95);
+            color: #fff;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
         /* Responsive */
         @media (max-width: 968px) {
@@ -421,6 +488,10 @@ mysqli_stmt_close($related_stmt);
             .product-info h1 {
                 font-size: 2rem;
             }
+
+            .thumbnail-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
@@ -430,9 +501,9 @@ mysqli_stmt_close($related_stmt);
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> Products</a></li>
-            <li><a href="cart.php"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            <li><a href="before.php"><i class="fas fa-home"></i> <span>Home</span></a></li>
+            <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> <span>Products</span></a></li>
+            <li><a href="cart.php"><i class="fas fa-shopping-cart"></i> <span>Cart</span></a></li>
             <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
             
             <?php if($isLoggedIn): ?>
@@ -451,7 +522,7 @@ mysqli_stmt_close($related_stmt);
                 </div>
             </li>
             <?php else: ?>
-            <li><a href="login.php" class="login-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li><a href="login.php" class="login-link"><i class="fas fa-sign-in-alt"></i> <span>Login</span></a></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -459,8 +530,8 @@ mysqli_stmt_close($related_stmt);
     <div class="product-container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="LandingPage.php">Home</a> / 
-            <a href="HomePage.php">Products</a> / 
+            <a href="before.php">Home</a> / 
+            <a href="HomePage.php"><?= htmlspecialchars($product['category']) ?></a> / 
             <span><?= htmlspecialchars($product['name']) ?></span>
         </div>
 
@@ -469,8 +540,18 @@ mysqli_stmt_close($related_stmt);
             <!-- Product Images -->
             <div class="product-images">
                 <div class="main-image">
-                    <img src="src/img/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                    <img src="<?= htmlspecialchars($product_images[0]) ?>" alt="<?= htmlspecialchars($product['name']) ?>" id="mainImage">
                 </div>
+                
+                <?php if (count($product_images) > 1): ?>
+                <div class="thumbnail-images">
+                    <?php foreach ($product_images as $index => $image): ?>
+                    <div class="thumbnail <?= $index === 0 ? 'active' : '' ?>" onclick="changeImage('<?= htmlspecialchars($image) ?>', this)">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="Thumbnail">
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- Product Info -->
@@ -480,29 +561,59 @@ mysqli_stmt_close($related_stmt);
 
                 <!-- Product Options -->
                 <div class="product-options">
+                    <?php if (!empty($product['sizes'])): ?>
+                    <div class="option-group">
+                        <label for="size">Size</label>
+                        <select id="size" name="size">
+                            <?php
+                            $sizes = explode(',', $product['sizes']);
+                            foreach ($sizes as $size):
+                            ?>
+                            <option value="<?= trim($size) ?>"><?= trim($size) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($product['colors'])): ?>
+                    <div class="option-group">
+                        <label for="color">Color</label>
+                        <select id="color" name="color">
+                            <?php
+                            $colors = explode(',', $product['colors']);
+                            foreach ($colors as $color):
+                            ?>
+                            <option value="<?= trim($color) ?>"><?= trim($color) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php endif; ?>
+
                     <div class="option-group">
                         <label for="quantity">Quantity</label>
                         <div class="quantity-selector">
-                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>">
+                            <span style="color: #aaa;"><?= $product['stock'] ?> available</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <button class="add-to-cart-btn" onclick="addToCart()">
+                <button class="add-to-cart-btn" onclick="addToCart(<?= $product_id ?>)">
                     <i class="fas fa-shopping-cart"></i> Add to Cart
                 </button>
-                <button class="buy-now-btn" onclick="buyNow()">
+                <button class="buy-now-btn" onclick="buyNow(<?= $product_id ?>)">
                     <i class="fas fa-bolt"></i> Buy Now
                 </button>
 
                 <!-- Product Details -->
                 <div class="product-details-section">
-                    <div class="details-header">
+                    <div class="details-header" onclick="toggleDetails()">
                         <i class="fas fa-list-ul"></i>
                         <h3>Product Details</h3>
+                        <i class="fas fa-chevron-down" id="detailsArrow" style="margin-left: auto; transition: transform 0.3s ease;"></i>
                     </div>
-                    <div class="details-content">
+                    <div class="details-content" id="detailsContent">
                         <?= nl2br(htmlspecialchars($product['description'])) ?>
                     </div>
                 </div>
@@ -511,7 +622,7 @@ mysqli_stmt_close($related_stmt);
                 <div class="product-meta">
                     <div class="meta-item">
                         <i class="fas fa-tag"></i>
-                        <span>Brand: <?= ucfirst(htmlspecialchars($brand)) ?></span>
+                        <span>Category: <?= htmlspecialchars($product['category']) ?></span>
                     </div>
                     <div class="meta-item">
                         <i class="fas fa-star"></i>
@@ -528,7 +639,7 @@ mysqli_stmt_close($related_stmt);
             <div class="related-grid">
                 <?php foreach ($related_products as $related): ?>
                 <div class="related-card" onclick="window.location.href='product_detail.php?id=<?= $related['id'] ?>'">
-                    <img src="src/img/<?= htmlspecialchars($related['image']) ?>" alt="<?= htmlspecialchars($related['name']) ?>">
+                    <img src="<?= htmlspecialchars($related['image']) ?>" alt="<?= htmlspecialchars($related['name']) ?>">
                     <h4><?= htmlspecialchars($related['name']) ?></h4>
                     <div class="price">₱<?= number_format($related['price'], 2) ?></div>
                 </div>
@@ -552,90 +663,92 @@ mysqli_stmt_close($related_stmt);
             }
         });
 
+        // Change Main Image
+        function changeImage(imageUrl, element) {
+            document.getElementById('mainImage').src = imageUrl;
+            document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Toggle Product Details
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const arrow = document.getElementById('detailsArrow');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
         // Add to Cart
-        async function addToCart() {
+        async function addToCart(productId) {
             <?php if (!$isLoggedIn): ?>
-                window.location.href = 'login.php?redirect=product_detail.php?id=<?= $product_id ?>';
+                window.location.href = 'login.php';
                 return;
             <?php endif; ?>
 
             const quantity = document.getElementById('quantity').value;
+            const size = document.getElementById('size')?.value || '';
+            const color = document.getElementById('color')?.value || '';
 
             try {
-                const formData = new FormData();
-                formData.append('action', 'add');
-                formData.append('product_id', <?= $product_id ?>);
-                formData.append('brand', '<?= $brand ?>');
-                formData.append('quantity', quantity);
-
                 const response = await fetch('php/cart.php', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'add',
+                        product_id: productId,
+                        quantity: quantity,
+                        size: size,
+                        color: color
+                    })
                 });
 
                 const data = await response.json();
                 
                 if (data.success) {
-                    showNotification('Product added to cart!', 'success');
+                    showAlert('Product added to cart!', 'success');
                 } else {
-                    showNotification(data.message || 'Failed to add to cart', 'error');
+                    showAlert(data.message || 'Failed to add to cart', 'error');
                 }
             } catch (error) {
-                showNotification('Error adding to cart', 'error');
+                showAlert('Error adding to cart', 'error');
             }
         }
 
         // Buy Now
-        async function buyNow() {
+        function buyNow(productId) {
             <?php if (!$isLoggedIn): ?>
-                window.location.href = 'login.php?redirect=product_detail.php?id=<?= $product_id ?>';
+                window.location.href = 'login.php';
                 return;
             <?php endif; ?>
 
-            const quantity = document.getElementById('quantity').value;
-
-            try {
-                const formData = new FormData();
-                formData.append('action', 'add');
-                formData.append('product_id', <?= $product_id ?>);
-                formData.append('brand', '<?= $brand ?>');
-                formData.append('quantity', quantity);
-
-                const response = await fetch('php/cart.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    window.location.href = 'checkout.php';
-                } else {
-                    showNotification(data.message || 'Failed to add to cart', 'error');
-                }
-            } catch (error) {
-                showNotification('Error processing request', 'error');
-            }
+            addToCart(productId).then(() => {
+                setTimeout(() => {
+                    window.location.href = 'cart.php';
+                }, 1000);
+            });
         }
 
-        // Show Notification
-        function showNotification(message, type = 'success') {
-            const existing = document.querySelector('.notification-toast');
-            if (existing) existing.remove();
-
-            const toast = document.createElement('div');
-            toast.className = `notification-toast ${type}`;
-            toast.innerHTML = `
+        // Show Alert
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                <span>${message}</span>
+                ${message}
             `;
-            
-            document.body.appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 100);
-            
+            document.body.appendChild(alert);
+
             setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
             }, 3000);
         }
     </script>
