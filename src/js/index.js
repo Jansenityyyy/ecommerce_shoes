@@ -28,11 +28,11 @@ fetch('php/fetch_limited.php')
         });
       }
 
-      // Add click handler for limited product "Buy Now"
+      // Add click handler for limited product "Buy Now" - GO TO PRODUCT DETAIL
       const shopNowBtn = document.getElementById('shop-now');
       if (shopNowBtn) {
         shopNowBtn.addEventListener('click', () => {
-          buyNow(product.id, product.brand);
+          window.location.href = `product_detail.php?id=${product.id}`;
         });
       }
       
@@ -96,11 +96,11 @@ fetch('php/fetch_products.php?brand=all')
       });
 
       html += `
-        <div class="product-card">
+        <div class="product-card" onclick="goToProduct(${p.id})" style="cursor: pointer;">
           <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
           <h3>${p.name}</h3>
           <p class="price">₱${formattedPrice}</p>
-          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}')">
+          <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id}, '${brand}')">
             <i class="fas fa-cart-plus"></i> Add to Cart
           </button>
         </div>
@@ -110,6 +110,12 @@ fetch('php/fetch_products.php?brand=all')
     productList.innerHTML = html;
   })
   .catch(err => console.error('Error fetching products:', err));
+
+
+// Go to Product Detail Page
+function goToProduct(productId) {
+  window.location.href = `product_detail.php?id=${productId}`;
+}
 
 
 // Add to Cart Function
@@ -134,7 +140,7 @@ async function addToCart(productId, brand) {
     } else {
       showNotification(data.message, 'error');
       setTimeout(() => {
-        window.location.href = 'login.php?redirect=Homepage.php';
+        window.location.href = 'login.php?redirect=HomePage.php';
       }, 1500);
     }
   } catch (err) {
@@ -165,14 +171,14 @@ async function buyNow(productId, brand) {
     } else {
       showNotification(data.message, 'error');
       setTimeout(() => {
-        window.location.href = 'login.php?redirect=Homepage.php';
+        window.location.href = 'login.php?redirect=HomePage.php';
       }, 1500);
     }
   } catch (err) {
     console.error('Error:', err);
     showNotification('Please login first', 'error');
     setTimeout(() => {
-      window.location.href = 'login.php?redirect=Homepage.php';
+      window.location.href = 'login.php?redirect=HomePage.php';
     }, 1500);
   }
 }
