@@ -227,9 +227,9 @@ mysqli_close($conn);
                 <p>Total Orders</p>
             </div>
             <div class="stat-box">
-                <i class="fas fa-users"></i>
+                <a href="users.php"><i class="fas fa-users"></i>
                 <h3><?= $stats['total_users'] ?></h3>
-                <p>Total Users</p>
+                <p>Total Users</p></a>
             </div>
             <div class="stat-box">
                 <i class="fas fa-box"></i>
