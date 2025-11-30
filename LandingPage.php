@@ -224,6 +224,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
                     <a href="orders.php"><i class="fas fa-box"></i> My Orders</a>
                     <a href="settings.php"><i class="fas fa-cog"></i> Settings</a>
                     <div class="dropdown-divider"></div>
+                    <a href="wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a>
                     <a href="php/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </li>

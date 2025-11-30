@@ -97,6 +97,9 @@ fetch('php/fetch_products.php?brand=all')
 
       html += `
         <div class="product-card">
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
+            <i class="far fa-heart"></i>
+          </div>
           <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
           <h3>${p.name}</h3>
           <p class="price">₱${formattedPrice}</p>
@@ -108,8 +111,83 @@ fetch('php/fetch_products.php?brand=all')
     });
 
     productList.innerHTML = html;
+    
+    // Check wishlist status for all products
+    checkAllWishlistStatus();
   })
   .catch(err => console.error('Error fetching products:', err));
+
+
+// Check wishlist status for all products
+async function checkAllWishlistStatus() {
+  try {
+    const hearts = document.querySelectorAll('.wishlist-heart');
+    
+    for (const heart of hearts) {
+      const productId = heart.dataset.productId;
+      const brand = heart.dataset.brand;
+      
+      const res = await fetch(`php/check_wishlist.php?product_id=${productId}&brand=${brand}`);
+      const data = await res.json();
+      
+      if (data.success && data.in_wishlist) {
+        const icon = heart.querySelector('i');
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        heart.classList.add('active');
+      }
+    }
+  } catch (err) {
+    console.error('Error checking wishlist status:', err);
+  }
+}
+
+
+// Toggle wishlist
+async function toggleWishlist(productId, brand, event) {
+  event.stopPropagation();
+  
+  try {
+    const formData = new FormData();
+    formData.append('action', 'toggle');
+    formData.append('product_id', productId);
+    formData.append('brand', brand);
+
+    const res = await fetch('php/manage_wishlist.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      const heart = document.querySelector(`.wishlist-heart[data-product-id="${productId}"][data-brand="${brand}"]`);
+      const icon = heart.querySelector('i');
+      
+      if (data.action === 'added') {
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        heart.classList.add('active');
+        showNotification('Added to wishlist!', 'success');
+      } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+        heart.classList.remove('active');
+        showNotification('Removed from wishlist', 'success');
+      }
+    } else {
+      showNotification(data.message, 'error');
+      if (data.message === 'Please login first') {
+        setTimeout(() => {
+          window.location.href = 'login.php?redirect=HomePage.php';
+        }, 1500);
+      }
+    }
+  } catch (err) {
+    console.error('Error toggling wishlist:', err);
+    showNotification('Error updating wishlist', 'error');
+  }
+}
 
 
 // Add to Cart Function
