@@ -347,7 +347,6 @@ $user_id = $_SESSION['user_id'];
                     <i class="fas fa-shopping-cart"></i> <span>Cart</span>
                     <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
-                <li><a href="wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a></li>
             </li>
             <li class="user-menu">
                 <div class="user-display" onclick="toggleDropdown()">

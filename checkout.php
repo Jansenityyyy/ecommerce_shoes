@@ -417,6 +417,7 @@ if (!$isLoggedIn) {
                 <div class="dropdown-menu">
                     <a href="profile.php"><i class="fas fa-user"></i> My Profile</a>
                     <a href="orders.php"><i class="fas fa-box"></i> My Orders</a>
+                    <a href="wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a>
                     <a href="settings.php"><i class="fas fa-cog"></i> Settings</a>
                     <div class="dropdown-divider"></div>
                     <a href="php/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
