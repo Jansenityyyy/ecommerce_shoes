@@ -320,15 +320,15 @@ if (!$isLoggedIn) {
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="HomePage.php#other-products"><i class="fas fa-shopping-bag"></i> Products</a></li>
+            <li><a href="before.php"><i class="fas fa-home"></i> <span>Home</span></a></li>
+            <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> <span>Products</span></a></li>
             <li>
                 <a href="cart.php" class="cart-link">
-                    <i class="fas fa-shopping-cart"></i> Cart
+                    <i class="fas fa-shopping-cart"></i> <span>Cart</span>
                     <span class="cart-badge hidden" id="cart-badge">0</span>
                 </a>
+                <li><a href="wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a></li>
             </li>
-            <li><a href="admin/admin_products.php"><i class="fa fa-cog"></i> Admin</a></li>
             <li class="user-menu">
                 <div class="user-display" onclick="toggleDropdown()">
                     <div class="user-avatar"><?= strtoupper(substr($username, 0, 1)) ?></div>
