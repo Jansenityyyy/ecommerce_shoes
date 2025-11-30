@@ -421,8 +421,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
             <li><a href="../LandingPage.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="admin.php"><i class="fas fa-plus"></i> Add Product</a></li>
-            <li><a href="admin_products.php"><i class="fas fa-list"></i> Manage</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="index.php"><i class="fas fa-plus"></i> Add Product</a></li>
+            <li><a href="admin_products.php"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="users.php"><i class="fas fa-users"></i> Users</a></li>
         </ul>
     </nav>
 
