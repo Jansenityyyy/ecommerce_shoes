@@ -165,6 +165,10 @@ mysqli_close($conn);
             color: #aaa;
             font-size: 0.95rem;
         }
+        .stat-box a {
+            text-decoration: none;
+            color: inherit;
+        }
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
