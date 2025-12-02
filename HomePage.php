@@ -460,10 +460,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     .app-logo img:hover {
     transform: scale(1.05);
 } 
+/* ===================== FLIP CARD FIX ===================== */
 .product-card {
-  position: relative;
-  perspective: 1000px;
-  height: 420px;
   perspective: 1000px;
 }
 
@@ -471,15 +469,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s ease;
   transform-style: preserve-3d;
+  transition: transform 0.6s ease;
 }
 
-.product-card.flipped .product-card-inner {
-  transform: rotateY(180deg);
-}
-
-/* Front and Back */
 .product-card-front,
 .product-card-back {
   position: absolute;
@@ -491,18 +484,14 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   left: 0;
 }
 
-.product-card-front {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255, 157, 0, 0.1);
+.product-card-back {
+  transform: rotateY(180deg);
 }
 
-.product-card-back {
-  background: linear-gradient(145deg, rgba(255, 157, 0, 0.15), rgba(255, 119, 0, 0.1));
-  border: 1px solid rgba(255, 157, 0, 0.3);
-  transform: rotateY(180deg);
-  overflow-y: auto;
+.product-card.flipped .product-card-inner {
   transform: rotateY(180deg);
 }
+/* ===================== END FIX ===================== */
 
 /* Wishlist Heart - Keep on front */
 .wishlist-heart {
