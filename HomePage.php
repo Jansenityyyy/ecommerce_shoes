@@ -471,8 +471,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
-  transition: transform 0.6s;
+  transition: transform 0.6s ease;
   transform-style: preserve-3d;
 }
 
@@ -480,16 +479,16 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   transform: rotateY(180deg);
 }
 
+/* Front and Back */
 .product-card-front,
 .product-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  -webkit-backface-visibility: hidden;
+  top: 0;
+  left: 0;
 }
 
 .product-card-front {
@@ -502,6 +501,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   border: 1px solid rgba(255, 157, 0, 0.3);
   transform: rotateY(180deg);
   overflow-y: auto;
+  transform: rotateY(180deg);
 }
 
 /* Wishlist Heart - Keep on front */
