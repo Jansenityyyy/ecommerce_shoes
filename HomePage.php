@@ -284,193 +284,27 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.1);
       transform: translateY(-3px);
     }
+/*================ FLIP CARD ANIMATION ================*/
+/* Add these styles to your HomePage.php <style> section */
 
-    /* ============ COUNTDOWN TIMER REDESIGN ============ */
-    .countdown-section {
-      background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 100, 0, 0.05));
-      border: 1px solid rgba(255, 157, 0, 0.2);
-      border-radius: 25px;
-      padding: 35px 25px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .countdown-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #ff9d00, #ff5500, #ff9d00);
-      background-size: 200% 100%;
-      animation: shimmer 2s linear infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    .countdown-header {
-      margin-bottom: 25px;
-    }
-
-    .countdown-header i {
-      font-size: 2.5rem;
-      color: #ff9d00;
-      margin-bottom: 10px;
-      display: block;
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    .countdown-header h3 {
-      color: #fff;
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
-    .countdown-header p {
-      color: #888;
-      font-size: 0.9rem;
-    }
-
-    .countdown-timer {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .countdown-box {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 15px;
-      padding: 20px 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .countdown-box::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #ff9d00, transparent);
-    }
-
-    .countdown-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #ff9d00;
-      line-height: 1;
-      text-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
-      font-family: 'Poppins', monospace;
-    }
-
-    .countdown-label {
-      color: #888;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-top: 8px;
-    }
-
-    .countdown-urgency {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: rgba(255, 61, 0, 0.2);
-      border-radius: 10px;
-      border: 1px solid rgba(255, 61, 0, 0.3);
-    }
-
-    .countdown-urgency p {
-      color: #ff6b6b;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .countdown-urgency i {
-      animation: pulse 1s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-
-    /* Add to Cart Button - Product Cards */
-    .product-card .add-cart-btn {
-      width: 100%;
-      padding: 12px 20px;
-      margin-top: 15px;
-      background: linear-gradient(135deg, #ff9d00, #ff7700);
-      border: none;
-      border-radius: 25px;
-      color: #111;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
-    }
-
-    .product-card .add-cart-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
-    }
-
-    /* Login Link Style */
-    nav .nav-links li a.login-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 20px;
-      border-radius: 25px;
-      background: rgba(255, 157, 0, 0.1);
-      border: 1px solid rgba(255, 157, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    nav .nav-links li a.login-link:hover {
-      background: rgba(255, 157, 0, 0.2);
-      border-color: #ff9d00;
-    }
-    .app-logo img {
-    width: 110px;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-    .app-logo img:hover {
-    transform: scale(1.05);
-} 
-/* ===================== FLIP CARD FIX ===================== */
+/* Product Card Container - 3D Flip Effect */
 .product-card {
+  position: relative;
   perspective: 1000px;
+  height: 420px;
 }
 
 .product-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
   transform-style: preserve-3d;
-  transition: transform 0.6s ease;
+}
+
+.product-card.flipped .product-card-inner {
+  transform: rotateY(180deg);
 }
 
 .product-card-front,
@@ -478,20 +312,24 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  top: 0;
-  left: 0;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.product-card-front {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 157, 0, 0.1);
 }
 
 .product-card-back {
+  background: linear-gradient(145deg, rgba(255, 157, 0, 0.15), rgba(255, 119, 0, 0.1));
+  border: 1px solid rgba(255, 157, 0, 0.3);
   transform: rotateY(180deg);
+  overflow-y: auto;
 }
-
-.product-card.flipped .product-card-inner {
-  transform: rotateY(180deg);
-}
-/* ===================== END FIX ===================== */
 
 /* Wishlist Heart - Keep on front */
 .wishlist-heart {
@@ -789,6 +627,180 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     text-align: left;
   }
 }
+    /* ============ COUNTDOWN TIMER REDESIGN ============ */    .countdown-section {
+      background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 100, 0, 0.05));
+      border: 1px solid rgba(255, 157, 0, 0.2);
+      border-radius: 25px;
+      padding: 35px 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .countdown-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff9d00, #ff5500, #ff9d00);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .countdown-header {
+      margin-bottom: 25px;
+    }
+
+    .countdown-header i {
+      font-size: 2.5rem;
+      color: #ff9d00;
+      margin-bottom: 10px;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .countdown-header h3 {
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .countdown-header p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .countdown-timer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .countdown-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      padding: 20px 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .countdown-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff9d00, transparent);
+    }
+
+    .countdown-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ff9d00;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
+      font-family: 'Poppins', monospace;
+    }
+
+    .countdown-label {
+      color: #888;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    .countdown-urgency {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: rgba(255, 61, 0, 0.2);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 61, 0, 0.3);
+    }
+
+    .countdown-urgency p {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .countdown-urgency i {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* Add to Cart Button - Product Cards */
+    .product-card .add-cart-btn {
+      width: 100%;
+      padding: 12px 20px;
+      margin-top: 15px;
+      background: linear-gradient(135deg, #ff9d00, #ff7700);
+      border: none;
+      border-radius: 25px;
+      color: #111;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
+    }
+
+    .product-card .add-cart-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
+    }
+
+    /* Login Link Style */
+    nav .nav-links li a.login-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 25px;
+      background: rgba(255, 157, 0, 0.1);
+      border: 1px solid rgba(255, 157, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    nav .nav-links li a.login-link:hover {
+      background: rgba(255, 157, 0, 0.2);
+      border-color: #ff9d00;
+    }
+    .app-logo img {
+    width: 110px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+    .app-logo img:hover {
+    transform: scale(1.05);
+} 
 
     /* Responsive */
     @media (max-width: 1100px) {
