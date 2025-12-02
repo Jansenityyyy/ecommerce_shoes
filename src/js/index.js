@@ -20,6 +20,7 @@ fetch('php/fetch_limited.php')
       });
       document.getElementById('limited-price').innerText = `₱${formattedPrice}`;
       
+      // Add click handler for limited product "Add to Cart"
       const limitedCartBtn = document.getElementById('limited-add-cart');
       if (limitedCartBtn) {
         limitedCartBtn.addEventListener('click', () => {
@@ -27,6 +28,7 @@ fetch('php/fetch_limited.php')
         });
       }
 
+      // Add click handler for limited product "Buy Now"
       const shopNowBtn = document.getElementById('shop-now');
       if (shopNowBtn) {
         shopNowBtn.addEventListener('click', () => {
@@ -84,6 +86,7 @@ fetch('php/fetch_products.php?brand=all')
 
     products.forEach(p => {
       const productImg = `src/img/${p.image}`;
+      // Extract brand from image path (e.g., "nike/5.png" -> "nike")
       const brand = p.image.split('/')[0];
 
       const priceNum = parseFloat(p.price.toString().replace(/,/g, ''));
@@ -92,72 +95,17 @@ fetch('php/fetch_products.php?brand=all')
         maximumFractionDigits: 2
       });
 
-      // Truncate description for preview
-      const shortDesc = p.description.length > 100 
-        ? p.description.substring(0, 100) + '...' 
-        : p.description;
-
       html += `
-        <div class="product-card" data-product-id="${p.id}">
-          <div class="product-card-inner">
-            <!-- FRONT SIDE -->
-            <div class="product-card-front">
-              <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
-                <i class="far fa-heart"></i>
-              </div>
-              <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
-              <h3>${p.name}</h3>
-              <p class="price">₱${formattedPrice}</p>
-              <div class="card-actions">
-                <button class="view-details-btn" onclick="flipCard(${p.id}, event)">
-                  <i class="fas fa-info-circle"></i> Details
-                </button>
-                <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-                  <i class="fas fa-cart-plus"></i> Add
-                </button>
-              </div>
-            </div>
-
-            <!-- BACK SIDE -->
-            <div class="product-card-back">
-              <div class="back-header">
-                <h3>${p.name}</h3>
-                <button class="back-close-btn" onclick="flipCard(${p.id}, event)">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-              
-              <div class="product-details">
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-tag"></i> Brand</span>
-                  <span class="detail-value brand-tag">${brand.toUpperCase()}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-dollar-sign"></i> Price</span>
-                  <span class="detail-value price-tag">₱${formattedPrice}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-box"></i> Product ID</span>
-                  <span class="detail-value">#${p.id}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-check-circle"></i> Availability</span>
-                  <span class="detail-value" style="color: #4caf50;">In Stock</span>
-                </div>
-                
-                <div class="description-section">
-                  <h4><i class="fas fa-align-left"></i> Description</h4>
-                  <p class="description-text">${p.description}</p>
-                </div>
-              </div>
-
-              <div class="back-actions">
-                <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-                  <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
-              </div>
-            </div>
+        <div class="product-card">
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
+            <i class="far fa-heart"></i>
           </div>
+          <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
+          <h3>${p.name}</h3>
+          <p class="price">₱${formattedPrice}</p>
+          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}')">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
         </div>
       `;
     });
@@ -168,16 +116,6 @@ fetch('php/fetch_products.php?brand=all')
     checkAllWishlistStatus();
   })
   .catch(err => console.error('Error fetching products:', err));
-
-
-// Flip Card Function
-function flipCard(productId, event) {
-  if (event) event.stopPropagation();
-  const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
-  if (card) {
-    card.classList.toggle('flipped');
-  }
-}
 
 
 // Check wishlist status for all products
@@ -253,9 +191,7 @@ async function toggleWishlist(productId, brand, event) {
 
 
 // Add to Cart Function
-async function addToCart(productId, brand, event) {
-  if (event) event.stopPropagation();
-  
+async function addToCart(productId, brand) {
   try {
     const formData = new FormData();
     formData.append('action', 'add');
@@ -276,7 +212,7 @@ async function addToCart(productId, brand, event) {
     } else {
       showNotification(data.message, 'error');
       setTimeout(() => {
-        window.location.href = 'login.php?redirect=HomePage.php';
+        window.location.href = 'login.php?redirect=Homepage.php';
       }, 1500);
     }
   } catch (err) {
@@ -286,7 +222,7 @@ async function addToCart(productId, brand, event) {
 }
 
 
-// Buy Now Function
+// Buy Now Function - Add to cart then go to checkout
 async function buyNow(productId, brand) {
   try {
     const formData = new FormData();
@@ -307,14 +243,14 @@ async function buyNow(productId, brand) {
     } else {
       showNotification(data.message, 'error');
       setTimeout(() => {
-        window.location.href = 'login.php?redirect=HomePage.php';
+        window.location.href = 'login.php?redirect=Homepage.php';
       }, 1500);
     }
   } catch (err) {
     console.error('Error:', err);
     showNotification('Please login first', 'error');
     setTimeout(() => {
-      window.location.href = 'login.php?redirect=HomePage.php';
+      window.location.href = 'login.php?redirect=Homepage.php';
     }, 1500);
   }
 }
