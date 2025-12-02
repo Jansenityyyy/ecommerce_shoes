@@ -464,6 +464,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   position: relative;
   perspective: 1000px;
   height: 420px;
+  perspective: 1000px;
 }
 
 .product-card-inner {
