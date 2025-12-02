@@ -1,49 +1,34 @@
 <?php
-// Disable error display, enable logging only
-error_reporting(E_ALL);
+// Disable all output buffering and error display
+error_reporting(0);
 ini_set('display_errors', 0);
-ini_set('log_errors', 1);
 
-// Start output buffering to catch any stray output
-ob_start();
-
+// Start session
 session_start();
 
-// Set JSON header immediately
+// Set JSON header at the very beginning
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
 // Include database connection
-if (!file_exists('connect.php')) {
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Database configuration file not found']);
-    exit;
-}
-
-include 'connect.php';
-
-// Check database connection
-if (!isset($conn) || !$conn) {
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
-    exit;
-}
+require_once 'connect.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Please login first']);
     exit;
 }
 
-// Check request method and action
+// Check request method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
     exit;
 }
 
+// Check action
 if (!isset($_POST['action']) || $_POST['action'] !== 'place_order') {
-    ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Invalid action']);
     exit;
 }
@@ -54,8 +39,7 @@ $user_id = $_SESSION['user_id'];
 $required_fields = ['full_name', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'payment_method'];
 foreach ($required_fields as $field) {
     if (empty($_POST[$field])) {
-        ob_end_clean();
-        echo json_encode(['success' => false, 'message' => "Missing required field: $field"]);
+        echo json_encode(['success' => false, 'message' => "Missing field: $field"]);
         exit;
     }
 }
@@ -71,17 +55,15 @@ $postal_code = mysqli_real_escape_string($conn, trim($_POST['postal_code']));
 $notes = isset($_POST['notes']) ? mysqli_real_escape_string($conn, trim($_POST['notes'])) : '';
 $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']);
 
-// Get and validate cart items
+// Get cart items
 if (empty($_POST['items'])) {
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'No items provided']);
+    echo json_encode(['success' => false, 'message' => 'No items in order']);
     exit;
 }
 
 $items = json_decode($_POST['items'], true);
 
 if (!is_array($items) || empty($items)) {
-    ob_end_clean();
     echo json_encode(['success' => false, 'message' => 'Invalid cart data']);
     exit;
 }
@@ -90,7 +72,6 @@ if (!is_array($items) || empty($items)) {
 $subtotal = 0;
 foreach ($items as $item) {
     if (!isset($item['price']) || !isset($item['quantity'])) {
-        ob_end_clean();
         echo json_encode(['success' => false, 'message' => 'Invalid item data']);
         exit;
     }
@@ -110,13 +91,14 @@ try {
     // Insert order
     $sql = "INSERT INTO orders (
         user_id, order_number, total_amount, shipping_fee, payment_method,
-        full_name, email, phone, address, city, province, postal_code, notes
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        full_name, email, phone, address, city, province, postal_code, notes,
+        order_status, payment_status, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', NOW())";
     
     $stmt = mysqli_prepare($conn, $sql);
     
     if (!$stmt) {
-        throw new Exception('Failed to prepare order statement: ' . mysqli_error($conn));
+        throw new Exception('Failed to prepare statement');
     }
     
     mysqli_stmt_bind_param(
@@ -126,10 +108,11 @@ try {
     );
     
     if (!mysqli_stmt_execute($stmt)) {
-        throw new Exception('Failed to insert order: ' . mysqli_stmt_error($stmt));
+        throw new Exception('Failed to create order');
     }
     
     $order_id = mysqli_insert_id($conn);
+    mysqli_stmt_close($stmt);
 
     // Insert order items
     $sql_item = "INSERT INTO order_items (
@@ -139,13 +122,13 @@ try {
     $stmt_item = mysqli_prepare($conn, $sql_item);
     
     if (!$stmt_item) {
-        throw new Exception('Failed to prepare order items statement: ' . mysqli_error($conn));
+        throw new Exception('Failed to prepare item statement');
     }
 
     foreach ($items as $item) {
         $product_id = intval($item['product_id']);
         $brand = isset($item['brand']) ? $item['brand'] : '';
-        $name = isset($item['name']) ? $item['name'] : 'Unknown Product';
+        $name = isset($item['name']) ? $item['name'] : 'Unknown';
         $image = isset($item['image']) ? $item['image'] : '';
         $price = floatval($item['price']);
         $quantity = intval($item['quantity']);
@@ -153,20 +136,15 @@ try {
         
         mysqli_stmt_bind_param(
             $stmt_item, "iisssdid",
-            $order_id,
-            $product_id,
-            $brand,
-            $name,
-            $image,
-            $price,
-            $quantity,
-            $item_subtotal
+            $order_id, $product_id, $brand, $name, $image, $price, $quantity, $item_subtotal
         );
         
         if (!mysqli_stmt_execute($stmt_item)) {
-            throw new Exception('Failed to insert order item: ' . mysqli_stmt_error($stmt_item));
+            throw new Exception('Failed to add item to order');
         }
     }
+    
+    mysqli_stmt_close($stmt_item);
 
     // Clear user's cart
     $sql_clear = "DELETE FROM cart WHERE user_id = ?";
@@ -180,13 +158,8 @@ try {
 
     // Commit transaction
     mysqli_commit($conn);
-    
-    // Close statements
-    mysqli_stmt_close($stmt);
-    mysqli_stmt_close($stmt_item);
 
-    // Clear output buffer and send success response
-    ob_end_clean();
+    // Success response
     echo json_encode([
         'success' => true,
         'order_number' => $order_number,
@@ -197,8 +170,6 @@ try {
     // Rollback on error
     mysqli_rollback($conn);
     
-    // Clear output buffer and send error response
-    ob_end_clean();
     echo json_encode([
         'success' => false,
         'message' => 'Error processing order: ' . $e->getMessage()

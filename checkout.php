@@ -3,7 +3,6 @@ session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 
-// Redirect to login if not logged in
 if (!$isLoggedIn) {
     header('Location: login.php?redirect=checkout.php');
     exit;
@@ -25,7 +24,6 @@ if (!$isLoggedIn) {
             min-height: 100vh;
         }
 
-        /* User Dropdown & Cart Badge */
         .user-menu { position: relative; }
         .user-display {
             display: flex;
@@ -107,18 +105,6 @@ if (!$isLoggedIn) {
         }
         .cart-badge.hidden { display: none; }
 
-        nav .nav-links li a.login-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            border-radius: 25px;
-            background: rgba(255, 157, 0, 0.1);
-            border: 1px solid rgba(255, 157, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        /* Checkout Container */
         .checkout-container {
             max-width: 1200px;
             margin: 120px auto 50px;
@@ -141,7 +127,6 @@ if (!$isLoggedIn) {
             gap: 30px;
         }
 
-        /* Shipping Form */
         .shipping-section {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 157, 0, 0.15);
@@ -207,7 +192,6 @@ if (!$isLoggedIn) {
             gap: 20px;
         }
 
-        /* Payment Method */
         .payment-methods {
             display: grid;
             gap: 15px;
@@ -252,7 +236,6 @@ if (!$isLoggedIn) {
             font-size: 1.3rem;
         }
 
-        /* Order Summary */
         .order-summary {
             background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 119, 0, 0.05));
             border: 1px solid rgba(255, 157, 0, 0.2);
@@ -374,7 +357,6 @@ if (!$isLoggedIn) {
             color: #ff9d00;
         }
 
-        /* Responsive */
         @media (max-width: 900px) {
             .checkout-grid {
                 grid-template-columns: 1fr;
@@ -392,11 +374,24 @@ if (!$isLoggedIn) {
             .user-name { display: none; }
             .checkout-container { margin-top: 100px; }
         }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
@@ -417,7 +412,6 @@ if (!$isLoggedIn) {
                 <div class="dropdown-menu">
                     <a href="profile.php"><i class="fas fa-user"></i> My Profile</a>
                     <a href="orders.php"><i class="fas fa-box"></i> My Orders</a>
-                    <a href="wishlist.php"><i class="fas fa-heart"></i> My Wishlist</a>
                     <a href="settings.php"><i class="fas fa-cog"></i> Settings</a>
                     <div class="dropdown-divider"></div>
                     <a href="php/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -426,12 +420,12 @@ if (!$isLoggedIn) {
         </ul>
     </nav>
 
-    <!-- Checkout Content -->
     <div class="checkout-container">
         <h1 class="checkout-title"><i class="fas fa-credit-card"></i> Checkout</h1>
         
+        <div class="error-message" id="errorMessage"></div>
+        
         <div class="checkout-grid">
-            <!-- Shipping Form -->
             <div class="shipping-section">
                 <h3><i class="fas fa-shipping-fast"></i> Shipping Information</h3>
                 
@@ -454,7 +448,7 @@ if (!$isLoggedIn) {
 
                     <div class="form-group">
                         <label>Address <span class="required">*</span></label>
-                        <input type="text" name="address" id="address" placeholder="Street Address, Building, Unit" required>
+                        <input type="text" name="address" id="address" required>
                     </div>
 
                     <div class="form-row">
@@ -475,7 +469,7 @@ if (!$isLoggedIn) {
 
                     <div class="form-group">
                         <label>Order Notes (Optional)</label>
-                        <textarea name="notes" id="notes" placeholder="Any special instructions?"></textarea>
+                        <textarea name="notes" id="notes"></textarea>
                     </div>
 
                     <h3 style="margin-top: 30px;"><i class="fas fa-wallet"></i> Payment Method</h3>
@@ -506,7 +500,6 @@ if (!$isLoggedIn) {
                 </form>
             </div>
 
-            <!-- Order Summary -->
             <div class="order-summary">
                 <h3><i class="fas fa-receipt"></i> Order Summary</h3>
                 
@@ -543,7 +536,6 @@ if (!$isLoggedIn) {
         const SHIPPING_FEE = 150;
         let cartItems = [];
 
-        // Load cart items
         document.addEventListener('DOMContentLoaded', () => {
             loadCartItems();
             updateCartBadge();
@@ -563,7 +555,7 @@ if (!$isLoggedIn) {
                 document.getElementById('place-order-btn').disabled = false;
             } catch (err) {
                 console.error('Error loading cart:', err);
-                alert('Error loading cart items');
+                showError('Error loading cart items');
             }
         }
 
@@ -596,7 +588,6 @@ if (!$isLoggedIn) {
             document.getElementById('summary-totals').style.display = 'block';
         }
 
-        // Place Order
         document.getElementById('place-order-btn').addEventListener('click', async () => {
             const form = document.getElementById('checkout-form');
             if (!form.checkValidity()) {
@@ -608,56 +599,58 @@ if (!$isLoggedIn) {
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
-            const formData = new FormData(form);
-            formData.append('action', 'place_order');
-            formData.append('items', JSON.stringify(cartItems));
-
-            // Debug: Log what we're sending
-            console.log('Sending order data:', {
-                items: cartItems,
-                form: Object.fromEntries(formData)
-            });
-
             try {
+                const formData = new FormData(form);
+                formData.append('action', 'place_order');
+                formData.append('items', JSON.stringify(cartItems));
+
+                console.log('Sending order data...');
+
                 const res = await fetch('php/process_order.php', {
                     method: 'POST',
                     body: formData
                 });
 
-                // Check if response is OK
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
 
-                // Get response text first to check if it's valid JSON
-                const responseText = await res.text();
-                console.log('Response text:', responseText);
+                const text = await res.text();
+                console.log('Response:', text);
 
                 let data;
                 try {
-                    data = JSON.parse(responseText);
-                } catch (parseError) {
-                    console.error('JSON parse error:', parseError);
-                    console.error('Response was:', responseText);
-                    throw new Error('Server returned invalid JSON. Check console for details.');
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('Parse error:', e);
+                    console.error('Response text:', text);
+                    throw new Error('Invalid response from server');
                 }
 
                 if (data.success) {
                     window.location.href = 'order_success.php?order=' + data.order_number;
                 } else {
-                    alert(data.message || 'Error placing order');
+                    showError(data.message || 'Error placing order');
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-lock"></i> Place Order';
                 }
             } catch (err) {
-                console.error('Error placing order:', err);
-                alert('Error placing order: ' + err.message);
+                console.error('Error:', err);
+                showError('Error placing order: ' + err.message);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-lock"></i> Place Order';
             }
         });
 
-        // Update Cart Badge
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+
         async function updateCartBadge() {
             try {
                 const res = await fetch('php/cart.php?action=count');

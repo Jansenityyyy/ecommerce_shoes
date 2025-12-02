@@ -320,7 +320,7 @@ if (!$isLoggedIn) {
     <nav>
         <div class="logo">SenSneaks Inc.</div>
         <ul class="nav-links">
-            <li><a href="before.php"><i class="fas fa-home"></i> <span>Home</span></a></li>
+            <li><a href="LandingPage.php"><i class="fas fa-home"></i> <span>Home</span></a></li>
             <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> <span>Products</span></a></li>
             <li>
                 <a href="cart.php" class="cart-link">
