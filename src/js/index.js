@@ -97,69 +97,7 @@ fetch('php/fetch_products.php?brand=all')
         ? p.description.substring(0, 100) + '...' 
         : p.description;
 
-      html += `
-        <div class="product-card" data-product-id="${p.id}">
-          <div class="product-card-inner">
-            <!-- FRONT SIDE -->
-            <div class="product-card-front">
-              <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
-                <i class="far fa-heart"></i>
-              </div>
-              <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
-              <h3>${p.name}</h3>
-              <p class="price">₱${formattedPrice}</p>
-              <div class="card-actions">
-                <button class="view-details-btn" onclick="flipCard(${p.id}, event)">
-                  <i class="fas fa-info-circle"></i> Details
-                </button>
-                <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-                  <i class="fas fa-cart-plus"></i> Add
-                </button>
-              </div>
-            </div>
-
-            <!-- BACK SIDE -->
-            <div class="product-card-back">
-              <div class="back-header">
-                <h3>${p.name}</h3>
-                <button class="back-close-btn" onclick="flipCard(${p.id}, event)">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-              
-              <div class="product-details">
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-tag"></i> Brand</span>
-                  <span class="detail-value brand-tag">${brand.toUpperCase()}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-dollar-sign"></i> Price</span>
-                  <span class="detail-value price-tag">₱${formattedPrice}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-box"></i> Product ID</span>
-                  <span class="detail-value">#${p.id}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label"><i class="fas fa-check-circle"></i> Availability</span>
-                  <span class="detail-value" style="color: #4caf50;">In Stock</span>
-                </div>
-                
-                <div class="description-section">
-                  <h4><i class="fas fa-align-left"></i> Description</h4>
-                  <p class="description-text">${p.description}</p>
-                </div>
-              </div>
-
-              <div class="back-actions">
-                <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-                  <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      
     });
 
     productList.innerHTML = html;
