@@ -259,7 +259,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
       transition: all 0.3s ease;
     }
 
@@ -377,11 +377,9 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
     .product-card img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      height: 300px;
       border-radius: 15px;
       margin-bottom: 15px;
-      background: #fff;
       padding: 10px;
       transition: transform 0.3s ease;
     }
@@ -391,11 +389,11 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     }
 
     .product-card h3 {
-      margin: 10px 0;
+      margin: 0px 0;
       font-size: 1.2rem;
       font-weight: 600;
       color: #fff;
-      min-height: 50px;
+      min-height: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -403,7 +401,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     }
 
     .product-card .price {
-      margin: 10px 0 15px 0;
+      margin: 0px 0 0px 0;
       font-weight: bold;
       font-size: 1.3rem;
       color: #ff9d00;
@@ -550,7 +548,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: linear-gradient(135deg, #ff9d00, #ff7700);
       border: none;
       border-radius: 25px;
-      color: #111;
+      color: #000000ff;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
@@ -680,8 +678,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
           <p class="product-price" id="limited-price"></p>
           
           <div class="btn-group">
-            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
-            <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i>Buy Now!!!!</button>
           </div>
         </div>
       </div>
