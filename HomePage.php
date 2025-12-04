@@ -291,7 +291,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 .product-card {
   position: relative;
   perspective: 1000px;
-  height: 420px;
+  height: 450px;
+  margin-bottom: 20px;
 }
 
 .product-card-inner {
@@ -315,8 +316,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 20px;
-  padding: 25px;
+  padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card-front {
@@ -374,55 +377,65 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 }
 
 /* Front Card Content */
+.product-card-front {
+  justify-content: space-between;
+}
+
 .product-card-front img {
   width: 100%;
-  height: 220px;
+  height: 180px;
   object-fit: cover;
   border-radius: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   background: #fff;
   padding: 10px;
   transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .product-card-front h3 {
-  margin: 15px 0 10px 0;
-  font-size: 1.3rem;
+  margin: 10px 0;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #fff;
-  min-height: 50px;
+  min-height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .product-card-front .price {
-  margin: 0 0 15px 0;
+  margin: 8px 0;
   font-weight: bold;
   font-size: 1.2rem;
   color: #ff9d00;
+  flex-shrink: 0;
 }
 
 .product-card-front .card-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .product-card-front .add-cart-btn,
 .product-card-front .view-details-btn {
   flex: 1;
-  padding: 12px 20px;
+  padding: 10px 15px;
   border: none;
   border-radius: 25px;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .product-card-front .add-cart-btn {
@@ -432,8 +445,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 }
 
 .product-card-front .add-cart-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 157, 0, 0.5);
 }
 
 .product-card-front .view-details-btn {
@@ -444,44 +457,48 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 
 .product-card-front .view-details-btn:hover {
   background: rgba(255, 157, 0, 0.1);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 /* Back Card Content */
 .product-card-back {
-  display: flex;
-  flex-direction: column;
-  padding: 30px 25px;
+  padding: 25px 20px;
 }
 
 .back-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
   border-bottom: 2px solid rgba(255, 157, 0, 0.3);
+  flex-shrink: 0;
 }
 
 .back-header h3 {
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 45px);
 }
 
 .back-close-btn {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: #ff9d00;
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .back-close-btn:hover {
@@ -492,12 +509,15 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 .product-details {
   flex: 1;
   text-align: left;
+  overflow-y: auto;
+  margin-bottom: 12px;
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
+  align-items: center;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(255, 157, 0, 0.1);
 }
 
@@ -508,6 +528,13 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 .detail-label {
   color: #aaa;
   font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-label i {
   font-size: 0.9rem;
 }
 
@@ -515,59 +542,63 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   color: #fff;
   font-weight: 500;
   text-align: right;
-  max-width: 60%;
+  max-width: 55%;
+  font-size: 0.9rem;
 }
 
 .detail-value.brand-tag {
   background: rgba(255, 157, 0, 0.2);
-  padding: 4px 12px;
-  border-radius: 15px;
+  padding: 4px 10px;
+  border-radius: 12px;
   color: #ff9d00;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
 }
 
 .detail-value.price-tag {
   color: #ff9d00;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
 .description-section {
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 15px;
+  padding-top: 15px;
   border-top: 2px solid rgba(255, 157, 0, 0.2);
 }
 
 .description-section h4 {
   color: #ff9d00;
-  font-size: 1.1rem;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .description-text {
   color: #ddd;
-  line-height: 1.6;
-  font-size: 0.95rem;
+  line-height: 1.5;
+  font-size: 0.85rem;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 .back-actions {
-  margin-top: 20px;
+  margin-top: auto;
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .back-actions .add-cart-btn {
   flex: 1;
-  padding: 14px 20px;
+  padding: 12px 20px;
   background: linear-gradient(135deg, #ff9d00, #ff7700);
   color: #111;
   border: none;
   border-radius: 25px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -584,49 +615,71 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
 }
 
 /* Scrollbar for back card */
-.product-card-back::-webkit-scrollbar {
-  width: 6px;
+.product-card-back::-webkit-scrollbar,
+.description-text::-webkit-scrollbar {
+  width: 4px;
 }
 
-.product-card-back::-webkit-scrollbar-track {
+.product-card-back::-webkit-scrollbar-track,
+.description-text::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
-.product-card-back::-webkit-scrollbar-thumb {
+.product-card-back::-webkit-scrollbar-thumb,
+.description-text::-webkit-scrollbar-thumb {
   background: rgba(255, 157, 0, 0.5);
   border-radius: 10px;
 }
 
-.product-card-back::-webkit-scrollbar-thumb:hover {
+.product-card-back::-webkit-scrollbar-thumb:hover,
+.description-text::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 157, 0, 0.7);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .product-card {
-    height: 450px;
+    height: 420px;
+  }
+
+  .product-card-front img {
+    height: 160px;
   }
 
   .product-card-front h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     min-height: 40px;
   }
 
+  .product-card-front .price {
+    font-size: 1.1rem;
+  }
+
+  .product-card-front .add-cart-btn,
+  .product-card-front .view-details-btn {
+    font-size: 0.8rem;
+    padding: 9px 12px;
+  }
+
   .back-header h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .detail-row {
-    flex-direction: column;
-    gap: 5px;
+    padding: 8px 0;
   }
 
+  .detail-label,
   .detail-value {
-    max-width: 100%;
-    text-align: left;
+    font-size: 0.8rem;
+  }
+
+  .description-text {
+    font-size: 0.8rem;
   }
 }
+
     /* ============ COUNTDOWN TIMER REDESIGN ============ */    .countdown-section {
       background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 100, 0, 0.05));
       border: 1px solid rgba(255, 157, 0, 0.2);
