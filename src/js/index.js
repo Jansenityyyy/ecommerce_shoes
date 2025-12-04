@@ -91,6 +91,20 @@ fetch('php/fetch_products.php?brand=all')
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
+
+      html += `
+        <div class="product-card" data-product-id="${p.id}">
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
+            <i class="far fa-heart"></i>
+          </div>
+          <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
+          <h3>${p.name}</h3>
+          <p class="price">₱${formattedPrice}</p>
+          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
+            <i class="fas fa-cart-plus"></i> Add
+          </button>
+        </div>
+      `;
     });
 
     productList.innerHTML = html;
