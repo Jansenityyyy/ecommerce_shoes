@@ -110,7 +110,7 @@ fetch('php/fetch_products.php?brand=all')
               <p class="price">₱${formattedPrice}</p>
               <div class="card-actions">
                 <button class="view-details-btn" onclick="flipCard(${p.id}, event)">
-                  <i class="fas fa-info-circle"></i> Details
+                  <i class="fas fa-info-circle"></i>
                 </button>
                 <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
                   <i class="fas fa-cart-plus"></i> Add
