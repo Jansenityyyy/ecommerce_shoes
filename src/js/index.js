@@ -92,10 +92,19 @@ fetch('php/fetch_products.php?brand=all')
         maximumFractionDigits: 2
       });
 
-      // Truncate description for preview
-      const shortDesc = p.description.length > 100 
-        ? p.description.substring(0, 100) + '...' 
-        : p.description;
+      html += `
+        <div class="product-card" data-product-id="${p.id}">
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
+            <i class="far fa-heart"></i>
+          </div>
+          <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
+          <h3>${p.name}</h3>
+          <p class="price">₱${formattedPrice}</p>
+          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      `;
     });
 
     productList.innerHTML = html;
@@ -104,16 +113,6 @@ fetch('php/fetch_products.php?brand=all')
     checkAllWishlistStatus();
   })
   .catch(err => console.error('Error fetching products:', err));
-
-
-// Flip Card Function
-function flipCard(productId, event) {
-  if (event) event.stopPropagation();
-  const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
-  if (card) {
-    card.classList.toggle('flipped');
-  }
-}
 
 
 // Check wishlist status for all products
