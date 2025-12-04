@@ -285,6 +285,54 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       transform: translateY(-3px);
     }
 
+    /* ============ PRODUCT CARDS SECTION ============ */
+    #other-products {
+      padding: 80px 50px;
+      background: #111;
+    }
+
+    #other-products h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #fff;
+      margin-bottom: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    #other-products h2 i {
+      color: #ff9d00;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Product Card Styles */
+    .product-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 157, 0, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(255, 157, 0, 0.2);
+      border-color: rgba(255, 157, 0, 0.3);
+    }
+
     /* Wishlist Heart */
     .wishlist-heart {
       position: absolute;
@@ -325,6 +373,48 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       25% { transform: scale(1.3); }
       50% { transform: scale(1.1); }
       75% { transform: scale(1.2); }
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      background: #fff;
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-card h3 {
+      margin: 10px 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .product-card .price {
+      margin: 10px 0 15px 0;
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: #ff9d00;
+      text-align: center;
+    }
+
+    /* Remove any pseudo-elements that might add extra content */
+    .product-card::before,
+    .product-card::after {
+      content: none !important;
+      display: none !important;
     }
 
     /* ============ COUNTDOWN TIMER REDESIGN ============ */
