@@ -75,10 +75,57 @@ function startCountdown(endDate) {
 }
 
 
+// Fetch All Products (CLEAN VERSION)
+fetch('php/fetch_products.php?brand=all')
+  .then(res => res.json())
+  .then(products => {
+    const productList = document.getElementById('productList');
+    let html = '';
+
+    products.forEach(p => {
+      const productImg = `src/img/${p.image}`;
+      const brand = p.image.split('/')[0];
+
+      const priceNum = parseFloat(p.price.toString().replace(/,/g, ''));
+      const formattedPrice = priceNum.toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      html += `
+        <div class="product-card" data-product-id="${p.id}">
+          
+          <!-- Wishlist Icon -->
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" 
+               data-product-id="${p.id}" data-brand="${brand}">
+            <i class="far fa-heart"></i>
+          </div>
+
+          <!-- Product Image -->
+          <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
+
+          <!-- Name -->
+          <h3>${p.name}</h3>
+
+          <!-- Price -->
+          <p class="price">₱${formattedPrice}</p>
+
+          <!-- Add to Cart Button -->
+          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+
+        </div>
+      `;
+    });
+
+    productList.innerHTML = html;
+    checkAllWishlistStatus();
+  })
+  .catch(err => console.error('Error fetching products:', err));
 
 
-
-// Check wishlist status for all products
+// Wishlist Check
 async function checkAllWishlistStatus() {
   try {
     const hearts = document.querySelectorAll('.wishlist-heart');
@@ -103,7 +150,7 @@ async function checkAllWishlistStatus() {
 }
 
 
-// Toggle wishlist
+// Toggle Wishlist
 async function toggleWishlist(productId, brand, event) {
   event.stopPropagation();
   
@@ -150,7 +197,7 @@ async function toggleWishlist(productId, brand, event) {
 }
 
 
-// Add to Cart Function
+// Add to Cart
 async function addToCart(productId, brand, event) {
   if (event) event.stopPropagation();
   
@@ -184,7 +231,7 @@ async function addToCart(productId, brand, event) {
 }
 
 
-// Buy Now Function
+// Buy Now
 async function buyNow(productId, brand) {
   try {
     const formData = new FormData();
@@ -261,7 +308,7 @@ function showNotification(message, type = 'success') {
 }
 
 
-// Initialize cart badge on page load
+// Init
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
 });
