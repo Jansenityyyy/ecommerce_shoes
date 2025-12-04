@@ -75,7 +75,7 @@ function startCountdown(endDate) {
 }
 
 
-// Fetch All Products (CLEAN VERSION)
+// Fetch All Products
 fetch('php/fetch_products.php?brand=all')
   .then(res => res.json())
   .then(products => {
@@ -94,38 +94,28 @@ fetch('php/fetch_products.php?brand=all')
 
       html += `
         <div class="product-card" data-product-id="${p.id}">
-          
-          <!-- Wishlist Icon -->
-          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" 
-               data-product-id="${p.id}" data-brand="${brand}">
+          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
             <i class="far fa-heart"></i>
           </div>
-
-          <!-- Product Image -->
           <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
-
-          <!-- Name -->
           <h3>${p.name}</h3>
-
-          <!-- Price -->
           <p class="price">₱${formattedPrice}</p>
-
-          <!-- Add to Cart Button -->
           <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-            <i class="fas fa-cart-plus"></i> Add to Cart
+            <i class="fas fa-cart-plus"></i> Add
           </button>
-
         </div>
       `;
     });
 
     productList.innerHTML = html;
+    
+    // Check wishlist status for all products
     checkAllWishlistStatus();
   })
   .catch(err => console.error('Error fetching products:', err));
 
 
-// Wishlist Check
+// Check wishlist status for all products
 async function checkAllWishlistStatus() {
   try {
     const hearts = document.querySelectorAll('.wishlist-heart');
@@ -150,7 +140,7 @@ async function checkAllWishlistStatus() {
 }
 
 
-// Toggle Wishlist
+// Toggle wishlist
 async function toggleWishlist(productId, brand, event) {
   event.stopPropagation();
   
@@ -197,7 +187,7 @@ async function toggleWishlist(productId, brand, event) {
 }
 
 
-// Add to Cart
+// Add to Cart Function
 async function addToCart(productId, brand, event) {
   if (event) event.stopPropagation();
   
@@ -231,7 +221,7 @@ async function addToCart(productId, brand, event) {
 }
 
 
-// Buy Now
+// Buy Now Function
 async function buyNow(productId, brand) {
   try {
     const formData = new FormData();
@@ -308,7 +298,7 @@ function showNotification(message, type = 'success') {
 }
 
 
-// Init
+// Initialize cart badge on page load
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
 });
