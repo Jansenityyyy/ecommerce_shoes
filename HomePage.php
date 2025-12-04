@@ -284,403 +284,51 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.1);
       transform: translateY(-3px);
     }
-/*================ FLIP CARD ANIMATION ================*/
-/* Add these styles to your HomePage.php <style> section */
 
-/* Product Card Container - 3D Flip Effect */
-.product-card {
-  position: relative;
-  perspective: 1000px;
-  height: 450px;
-  margin-bottom: 20px;
-}
+    /* Wishlist Heart */
+    .wishlist-heart {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-.product-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-}
+    .wishlist-heart:hover {
+      background: #fff;
+      transform: scale(1.15);
+      box-shadow: 0 6px 20px rgba(255, 157, 0, 0.4);
+    }
 
-.product-card.flipped .product-card-inner {
-  transform: rotateY(180deg);
-}
+    .wishlist-heart i {
+      font-size: 1.4rem;
+      color: #ff9d00;
+      transition: all 0.3s ease;
+    }
 
-.product-card-front,
-.product-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-}
+    .wishlist-heart.active i {
+      color: #ff0000;
+      animation: heartBeat 0.5s ease;
+    }
 
-.product-card-front {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255, 157, 0, 0.1);
-}
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1.1); }
+      75% { transform: scale(1.2); }
+    }
 
-.product-card-back {
-  background: linear-gradient(145deg, rgba(255, 157, 0, 0.15), rgba(255, 119, 0, 0.1));
-  border: 1px solid rgba(255, 157, 0, 0.3);
-  transform: rotateY(180deg);
-  overflow-y: auto;
-}
-
-/* Wishlist Heart - Keep on front */
-.wishlist-heart {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 45px;
-  height: 45px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.wishlist-heart:hover {
-  background: #fff;
-  transform: scale(1.15);
-  box-shadow: 0 6px 20px rgba(255, 157, 0, 0.4);
-}
-
-.wishlist-heart i {
-  font-size: 1.4rem;
-  color: #ff9d00;
-  transition: all 0.3s ease;
-}
-
-.wishlist-heart.active i {
-  color: #ff0000;
-  animation: heartBeat 0.5s ease;
-}
-
-@keyframes heartBeat {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.3); }
-  50% { transform: scale(1.1); }
-  75% { transform: scale(1.2); }
-}
-
-/* Front Card Content */
-.product-card-front {
-  justify-content: space-between;
-}
-
-.product-card-front img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 12px;
-  background: #fff;
-  padding: 10px;
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-}
-
-.product-card-front h3 {
-  margin: 10px 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  min-height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.product-card-front .price {
-  margin: 8px 0;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #ff9d00;
-  flex-shrink: 0;
-}
-
-.product-card-front .card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.product-card-front .add-cart-btn,
-.product-card-front .view-details-btn {
-  flex: 1;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 25px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.product-card-front .add-cart-btn {
-  background: linear-gradient(135deg, #ff9d00, #ff7700);
-  color: #111;
-  box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
-}
-
-.product-card-front .add-cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 157, 0, 0.5);
-}
-
-.product-card-front .view-details-btn {
-  background: transparent;
-  color: #ff9d00;
-  border: 2px solid #ff9d00;
-}
-
-.product-card-front .view-details-btn:hover {
-  background: rgba(255, 157, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-/* Back Card Content */
-.product-card-back {
-  padding: 25px 20px;
-}
-
-.back-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(255, 157, 0, 0.3);
-  flex-shrink: 0;
-}
-
-.back-header h3 {
-  color: #fff;
-  font-size: 1.2rem;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100% - 45px);
-}
-
-.back-close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #ff9d00;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.back-close-btn:hover {
-  background: rgba(255, 157, 0, 0.2);
-  transform: rotate(90deg);
-}
-
-.product-details {
-  flex: 1;
-  text-align: left;
-  overflow-y: auto;
-  margin-bottom: 12px;
-}
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 157, 0, 0.1);
-}
-
-.detail-row:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  color: #aaa;
-  font-weight: 600;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.detail-label i {
-  font-size: 0.9rem;
-}
-
-.detail-value {
-  color: #fff;
-  font-weight: 500;
-  text-align: right;
-  max-width: 55%;
-  font-size: 0.9rem;
-}
-
-.detail-value.brand-tag {
-  background: rgba(255, 157, 0, 0.2);
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: #ff9d00;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-}
-
-.detail-value.price-tag {
-  color: #ff9d00;
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.description-section {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 2px solid rgba(255, 157, 0, 0.2);
-}
-
-.description-section h4 {
-  color: #ff9d00;
-  font-size: 1rem;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.description-text {
-  color: #ddd;
-  line-height: 1.5;
-  font-size: 0.85rem;
-  max-height: 120px;
-  overflow-y: auto;
-}
-
-.back-actions {
-  margin-top: auto;
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.back-actions .add-cart-btn {
-  flex: 1;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, #ff9d00, #ff7700);
-  color: #111;
-  border: none;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3);
-}
-
-.back-actions .add-cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 157, 0, 0.5);
-}
-
-/* Scrollbar for back card */
-.product-card-back::-webkit-scrollbar,
-.description-text::-webkit-scrollbar {
-  width: 4px;
-}
-
-.product-card-back::-webkit-scrollbar-track,
-.description-text::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-.product-card-back::-webkit-scrollbar-thumb,
-.description-text::-webkit-scrollbar-thumb {
-  background: rgba(255, 157, 0, 0.5);
-  border-radius: 10px;
-}
-
-.product-card-back::-webkit-scrollbar-thumb:hover,
-.description-text::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 157, 0, 0.7);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .product-card {
-    height: 420px;
-  }
-
-  .product-card-front img {
-    height: 160px;
-  }
-
-  .product-card-front h3 {
-    font-size: 1rem;
-    min-height: 40px;
-  }
-
-  .product-card-front .price {
-    font-size: 1.1rem;
-  }
-
-  .product-card-front .add-cart-btn,
-  .product-card-front .view-details-btn {
-    font-size: 0.8rem;
-    padding: 9px 12px;
-  }
-
-  .back-header h3 {
-    font-size: 1.1rem;
-  }
-
-  .detail-row {
-    padding: 8px 0;
-  }
-
-  .detail-label,
-  .detail-value {
-    font-size: 0.8rem;
-  }
-
-  .description-text {
-    font-size: 0.8rem;
-  }
-}
-
-    /* ============ COUNTDOWN TIMER REDESIGN ============ */    .countdown-section {
+    /* ============ COUNTDOWN TIMER REDESIGN ============ */
+    .countdown-section {
       background: linear-gradient(145deg, rgba(255, 157, 0, 0.1), rgba(255, 100, 0, 0.05));
       border: 1px solid rgba(255, 157, 0, 0.2);
       border-radius: 25px;
@@ -845,15 +493,16 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       background: rgba(255, 157, 0, 0.2);
       border-color: #ff9d00;
     }
+
     .app-logo img {
-    width: 110px;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
+      width: 110px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
 
     .app-logo img:hover {
-    transform: scale(1.05);
-} 
+      transform: scale(1.05);
+    }
 
     /* Responsive */
     @media (max-width: 1100px) {
@@ -883,6 +532,9 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
       .user-display { padding: 8px 12px; }
       .countdown-timer { grid-template-columns: repeat(2, 1fr); }
       .countdown-number { font-size: 2rem; }
+      .product-card img { height: 180px; }
+      .product-card h3 { font-size: 1.1rem; }
+      .product-card .price { font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -894,13 +546,13 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
     <div class="logo">SenSneaks Inc.</div>
     <ul class="nav-links">
       <li><a href="LandingPage.php"><i class="fas fa-home"></i> <span>Home</span></a></li>
-            <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> <span>Products</span></a></li>
-            <li>
-                <a href="cart.php" class="cart-link">
-                    <i class="fas fa-shopping-cart"></i> <span>Cart</span>
-                    <span class="cart-badge hidden" id="cart-badge">0</span>
-                </a>
-            </li>
+      <li><a href="HomePage.php"><i class="fas fa-shopping-bag"></i> <span>Products</span></a></li>
+      <li>
+        <a href="cart.php" class="cart-link">
+          <i class="fas fa-shopping-cart"></i> <span>Cart</span>
+          <span class="cart-badge hidden" id="cart-badge">0</span>
+        </a>
+      </li>
       
 <?php if($isLoggedIn): ?>
     <li class="user-menu">
@@ -938,8 +590,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
           <p class="product-price" id="limited-price"></p>
           
           <div class="btn-group">
-            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i>     Buy Now!    </button> <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-            
+            <button class="btn-buy" id="shop-now"><i class="fas fa-shopping-bag"></i> Buy Now!</button>
+            <button class="btn-cart" id="limited-add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
           </div>
         </div>
       </div>
@@ -979,7 +631,6 @@ $username = $isLoggedIn ? $_SESSION['username'] : '';
   </section>
 
   <!-- Other Products -->
-  
   <section id="other-products">
     <h2><i class="fas fa-fire"></i> BEST SELLING SHOES!</h2>
     <div class="product-grid" id="productList"></div>
