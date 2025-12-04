@@ -75,44 +75,7 @@ function startCountdown(endDate) {
 }
 
 
-// Fetch All Products
-fetch('php/fetch_products.php?brand=all')
-  .then(res => res.json())
-  .then(products => {
-    const productList = document.getElementById('productList');
-    let html = '';
 
-    products.forEach(p => {
-      const productImg = `src/img/${p.image}`;
-      const brand = p.image.split('/')[0];
-
-      const priceNum = parseFloat(p.price.toString().replace(/,/g, ''));
-      const formattedPrice = priceNum.toLocaleString('en-PH', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-
-      html += `
-        <div class="product-card" data-product-id="${p.id}">
-          <div class="wishlist-heart" onclick="toggleWishlist(${p.id}, '${brand}', event)" data-product-id="${p.id}" data-brand="${brand}">
-            <i class="far fa-heart"></i>
-          </div>
-          <img src="${productImg}" alt="${p.name}" onerror="this.src='src/img/placeholder.png'">
-          <h3>${p.name}</h3>
-          <p class="price">₱${formattedPrice}</p>
-          <button class="add-cart-btn" onclick="addToCart(${p.id}, '${brand}', event)">
-            <i class="fas fa-cart-plus"></i> Add
-          </button>
-        </div>
-      `;
-    });
-
-    productList.innerHTML = html;
-    
-    // Check wishlist status for all products
-    checkAllWishlistStatus();
-  })
-  .catch(err => console.error('Error fetching products:', err));
 
 
 // Check wishlist status for all products
